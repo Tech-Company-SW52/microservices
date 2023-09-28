@@ -1,9 +1,11 @@
 package com.carrier.carrierservice.controller;
 
 import com.carrier.carrierservice.entity.Carrier;
+import com.carrier.carrierservice.entity.Comment;
 import com.carrier.carrierservice.entity.Experience;
 import com.carrier.carrierservice.entity.Vehicle;
 import com.carrier.carrierservice.service.impl.CarrierServiceImpl;
+import com.carrier.carrierservice.service.impl.CommentServiceImpl;
 import com.carrier.carrierservice.service.impl.ExperienceServiceImpl;
 import com.carrier.carrierservice.service.impl.VehicleServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -35,6 +37,9 @@ public class CarrierRest {
     @Autowired
     ExperienceServiceImpl experienceService;
 
+    @Autowired
+    CommentServiceImpl commentService;
+    
     @GetMapping
     public ResponseEntity<List<Carrier>> listAllCarriers() {
         List<Carrier> carriers = carrierService.findCarrierAll();
@@ -272,6 +277,102 @@ public class CarrierRest {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(experiences);
+    }
+
+    @GetMapping(value = "/comments")
+    public ResponseEntity<List<Comment>> listAllComments(){
+        List<Comment> comments = commentService.findCommentAll();
+        if(comments.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(comments);
+    }
+
+    @GetMapping(value = "/comments/{id}")
+    public ResponseEntity<Comment> getComment(@PathVariable("id") Long id){
+        log.info("Fetching Comment with id {}", id);
+        Comment comment = commentService.getComment(id);
+        if(comment==null){
+            log.error("Comment with id {} not found.", id);
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(comment);
+    }
+    /*
+    @GetMapping(value = "/{id}/comments")
+    public ResponseEntity<List<Comment>> listAllCommentsByCarrierId(@PathVariable("id") Long id){
+        List<Comment> comments = commentService.findByCarrierId(id);
+        if(comments.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(comments);
+    }
+
+     */
+    @GetMapping(value = "/{id}/comments/{commentId}")
+    public ResponseEntity<Comment> getCommentByCarrierId(@PathVariable("id") Long id, @PathVariable("commentId") Long commentId){
+        log.info("Fetching Comment with id {}", commentId);
+        Comment comment = commentService.getComment(commentId);
+        if(comment ==null) {
+            log.error("Comment with id {} not found.", commentId);
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(comment);
+    }
+    @PostMapping(value = "/{carrierId}/{clientId}/comments")
+    public ResponseEntity<Comment> createComment(@PathVariable("carrierId") Long carrierId,@PathVariable("clientId") Long clientId, String commentText, @Valid @RequestBody Comment comment, BindingResult result){
+        log.info("Creating Comment : {}", comment);
+        if(result.hasErrors()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
+        }
+        /*
+        Carrier carrier = carrierService.getCarrier(id);
+        Client client = clientService.getClient(id);
+
+        if (carrier == null){
+            log.error("Unable to create. Carrier with id {} not found.", id);
+            return ResponseEntity.notFound().build();
+        }
+        if (client == null){
+            log.error("Unable to create. Carrier with id {} not found.", id);
+            return ResponseEntity.notFound().build();
+        }
+        comment.setCarrier(carrier).setClient(client);
+        */
+        Comment commentDB = commentService.createComment(comment);
+        return ResponseEntity.ok(commentDB);
+    }
+    @PutMapping(value = "/{id}/comments/{commentId}")
+    public ResponseEntity<Comment> updateComment(@PathVariable("id") Long id, @PathVariable("commentId") Long commentId, @RequestBody Comment comment){
+        log.info("Updating Comment with id {}", commentId);
+        Comment currentComment = commentService.getComment(commentId);
+        if(currentComment==null){
+            log.error("Unable to update. Comment with id {} not found.", commentId);
+            return ResponseEntity.notFound().build();
+        }
+        /*
+        Carrier carrier = carrierService.getCarrier(id);
+        if(carrier == null){
+            log.error("Unable to update. Carrier with id {} not found.",id);
+            return ResponseEntity.notFound().build();
+        }
+        comment.setComment(carrier);
+         */
+        comment.setId(commentId);
+        currentComment = commentService.updateComment(comment);
+        return ResponseEntity.ok(currentComment);
+    }
+    @DeleteMapping(value = "/{id}/comments/{commentId}")
+    public ResponseEntity<Comment> deleteComment(@PathVariable("id") Long id, @PathVariable("commentId") Long commentId){
+        log.info("Fetching & Deleting Comment with id {}", commentId);
+        Comment comment = commentService.getComment(commentId);
+        if(comment == null){
+            log.error("Unable to delete. Comment with id {} not found.", commentId);
+            return ResponseEntity.notFound().build();
+        }
+        comment = commentService.deleteComment(comment);
+        return ResponseEntity.ok(comment);
     }
 
 }
