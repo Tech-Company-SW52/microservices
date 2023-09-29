@@ -26,17 +26,17 @@ class SearchServiceApplicationTests {
 	@Test
 	public void testFilterTransportByName() {
 		// Datos de prueba
-		String nameToFilter = "Transporte 1";
+		String nameToFilter = "Descripción 1";
 		List<Transport> allTransport = Arrays.asList(
-				new Transport(1L, "Transporte 1", "Descripción 1"),
-				new Transport(2L, "Transporte 2", "Descripción 2"),
-				new Transport(3L, "Transporte 3", "Descripción 3")
+				new Transport(1L, "Transporte 1", "Descripción 1", 4l),
+				new Transport(2L, "Transporte 2", "Descripción 2", 3L),
+				new Transport(3L, "Transporte 3", "Descripción 3", 1L)
 		);
 
 		// Llama al método que deseas probar
 		List<Transport> filteredTransport = searchService.filerTransportByName(allTransport, nameToFilter);
 
 		// Verifica el resultado esperado
-		assertEquals(nameToFilter, filteredTransport.get(0).getName()); // El resultado debe coincidir con el nombre filtrado
+		assertEquals(nameToFilter, filteredTransport.get(0).getType()); // El resultado debe coincidir con el nombre filtrado
 	}
 }

@@ -16,7 +16,7 @@ public class SearchServiceImpl implements SearchService {
     public List<Transport> filerTransportByName(List<Transport> allTransport, String name) {
         // Aplica el filtro para buscar servicios de transporte por nombre
         return allTransport.stream()
-                .filter(transport -> transport.getName().equalsIgnoreCase(name))
+                .filter(transport -> transport.getType().equalsIgnoreCase(name))
                 .collect(Collectors.toList());
     }
 

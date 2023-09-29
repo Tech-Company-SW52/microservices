@@ -21,20 +21,19 @@ public class SearchController {
 
 
     @GetMapping("/transport")
-    public List<Transport> searchTransportByName(@RequestParam String name) {
+    public List<Transport> searchTransportByType(@RequestParam String type) {
         // Realiza una solicitud HTTP GET al endpoint de la otra API para obtener la lista de transportes
         //String otherApiUrl = "http://otra-api.com/api/transport?name=" + name;
         // List<Transport> transportList = restTemplate.getForObject(otherApiUrl, List.class);
         List<Transport> transportList = new ArrayList<>();
-        transportList.add(new Transport(1L, "Transporte 1", "Descripción 1"));
-        transportList.add(new Transport(2L, "Transporte 2", "Descripción 2"));
-        transportList.add(new Transport(3L, "Transporte 3", "Descripción 3"));
+        transportList.add(new Transport(1L, "Transporte1", "Auto",4L));
+        transportList.add(new Transport(2L, "Transporte 2", "Camion",3L));
+        transportList.add(new Transport(3L, "Transporte 3", "Auto", 1L));
         // Puedes aplicar cualquier lógica adicional que necesites en la lista de transportes obtenida
         // Por ejemplo, podrías filtrar o manipular la lista según tus necesidades
-        List<Transport> filteredTransportList = searchService.filerTransportByName(transportList, name);
+        List<Transport> filteredTransportList = searchService.filerTransportByName(transportList, type);
 
         return filteredTransportList;
-
     }
 
 
