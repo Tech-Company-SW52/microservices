@@ -1,4 +1,6 @@
 package com.personalData.PersonalData.PersonalDataService.entity;
 
-public class DataType {
+public enum DataType {
+    CARRIER,
+    CLIENT
 }
