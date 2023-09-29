@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
@@ -28,7 +29,7 @@ public class Vehicle implements Serializable {
     @Column(name = "type", nullable = false)
     private String type;
 
-    @NotEmpty(message = "La cantidad no debe ser vacío")
+    @NotNull(message = "La cantidad no debe ser vacío")
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 }
