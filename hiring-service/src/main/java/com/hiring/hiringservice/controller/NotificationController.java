@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/notifications")
+@RequestMapping("/notifications")
 @Api(tags="Notification", value="Web Service RESTful of Notifications")
 public class NotificationController {
     private final NotificationService notificationService;
