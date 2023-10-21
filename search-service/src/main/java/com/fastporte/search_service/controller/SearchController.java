@@ -3,6 +3,9 @@ import com.fastporte.search_service.entity.Carrier;
 import com.fastporte.search_service.entity.Vehicle;
 import com.fastporte.search_service.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,13 +25,16 @@ public class SearchController {
     public List<Vehicle> getVehiclesAndCarriers() {
 
         RestTemplate restTemplate = new RestTemplate();
-        //cambiar URL
-        String carriersUrl = "http://carrier-service/carriers";
-        List<Carrier> carriers = restTemplate.getForObject(carriersUrl, List.class);
 
-        //cambiar URL
-        String vehiclesUrl = "http://carrier-service/carriers/vehicles";
-        List<Vehicle> vehicles = restTemplate.getForObject(vehiclesUrl, List.class);
+        // Obtener carriers
+        // cambiar URL
+        ResponseEntity<List<Carrier>> responseCarriers = restTemplate.exchange("http://localhost:8081/carriers", HttpMethod.GET, null, new ParameterizedTypeReference<List<Carrier>>() {});
+        List<Carrier> carriers = responseCarriers.getBody();
+
+        // Obtener vehicles
+        // cambiar URL
+        ResponseEntity<List<Vehicle>> responseVehicles = restTemplate.exchange("http://localhost:8081/carriers/vehicles", HttpMethod.GET, null, new ParameterizedTypeReference<List<Vehicle>>() {});
+        List<Vehicle> vehicles = responseVehicles.getBody();
 
         // Agrega los carriers a los vehicles
         for (Vehicle vehicle : vehicles) {
