@@ -1,10 +1,12 @@
+server:
+  port: 8098
 spring:
   application:
     name: search-service
   cloud:
     config:
-      uri: http://localhost:8801
+      uri: http://localhost:8081
       username: root
       password: s3cr3t
   config:
-    import: optional:configserver:http://localhost:8081
+    import: configserver:http://localhost:8081
