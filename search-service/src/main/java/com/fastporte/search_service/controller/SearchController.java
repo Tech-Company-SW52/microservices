@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDate;
+import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +21,7 @@ public class SearchController {
     //obtener data de otro microservicio
     public List<Vehicle> getVehiclesAndCarriers() {
 
+        RestTemplate restTemplate = new RestTemplate();
         //cambiar URL
         String carriersUrl = "http://carrier-service/carriers";
         List<Carrier> carriers = restTemplate.getForObject(carriersUrl, List.class);
