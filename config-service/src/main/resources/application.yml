@@ -2,8 +2,8 @@ server:
   port: 8081
 
 spring:
-  application:
-    name: config-service
+#  application:          # no va en el ejemplo
+#    name: config-service # no va en el ejemplo
   cloud:
     config:
       server:
@@ -12,7 +12,7 @@ spring:
           searchPaths: config-data
           username: ${GIT_USER}
           password: ${GIT_PASSWORD}
-          default-label: develop
+          default-label: "develop"
   security:
     user:
       name: root
