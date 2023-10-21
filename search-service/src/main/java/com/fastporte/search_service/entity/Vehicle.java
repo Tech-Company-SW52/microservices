@@ -10,8 +10,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transport {
+public class Vehicle {
+
     private Long id;
+
+    private Carrier carrier;
 
     private String photo;
 
