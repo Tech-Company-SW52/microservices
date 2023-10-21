@@ -8,7 +8,7 @@ group = 'com.hiring'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '11'
+	sourceCompatibility = '17'
 }
 
 configurations {
@@ -23,20 +23,19 @@ repositories {
 	maven { url 'https://repo.spring.io/snapshot' }
 }
 ext {
-	set('springBootAdminVersion', "2.3.0")//"3.1.5") //"2.3.0") //añadido
-	set('springCloudVersion', "2021.0.8")
+	set('springBootAdminVersion', "3.1.5")
+	set('springCloudVersion', "2022.0.4")
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-
-	implementation 'de.codecentric:spring-boot-admin-starter-client'		//añadido
-	implementation 'org.springframework.cloud:spring-cloud-starter-config'	//
-
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client' //
-	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+	implementation 'de.codecentric:spring-boot-admin-starter-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	//implementation 'org.springframework.cloud:spring-cloud-starter-sleuth' //añadido
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

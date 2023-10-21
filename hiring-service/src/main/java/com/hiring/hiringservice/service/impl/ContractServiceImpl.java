@@ -4,6 +4,8 @@ package com.hiring.hiringservice.service.impl;
 import com.hiring.hiringservice.entity.Contract;
 import com.hiring.hiringservice.repository.ContractRepository;
 import com.hiring.hiringservice.service.ContractService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.stylesheets.LinkStyle;
@@ -11,10 +13,12 @@ import org.w3c.dom.stylesheets.LinkStyle;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
-@Transactional(readOnly = true)
 public class ContractServiceImpl implements ContractService {
-    private final ContractRepository contractRepository;
+
+    @Autowired
+    ContractRepository contractRepository;
 
     public ContractServiceImpl(ContractRepository contractRepository) {
         this.contractRepository = contractRepository;

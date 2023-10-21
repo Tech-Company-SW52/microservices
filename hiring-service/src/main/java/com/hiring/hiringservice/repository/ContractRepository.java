@@ -10,6 +10,7 @@ import java.util.List;
 public interface ContractRepository extends JpaRepository<Contract, Long>
 {
     List<Contract> findByDriverId(Long driverId);
+    List<Contract> findByAll();
 
     List<Contract> findByClientId(Long clientId);
 
