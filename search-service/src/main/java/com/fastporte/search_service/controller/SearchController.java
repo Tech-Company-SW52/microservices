@@ -2,6 +2,7 @@ package com.fastporte.search_service.controller;
 import com.fastporte.search_service.entity.Carrier;
 import com.fastporte.search_service.entity.Vehicle;
 import com.fastporte.search_service.service.SearchService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -14,8 +15,9 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
-@RequestMapping("api/v1/search/vehicle")
+@RequestMapping("/search/vehicle")
 public class SearchController {
 
     @Autowired

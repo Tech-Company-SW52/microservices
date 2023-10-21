@@ -21,6 +21,10 @@ spring:
           uri: lb://carrier-service
           predicates:
             - Path=/carrier/**
+        - id: search-service
+          uri: lb://search-service
+          predicates:
+            - Path=/search/vehicle/**
         # - id: shopping-service
         #   uri: lb://shopping-service
         #   predicates:
