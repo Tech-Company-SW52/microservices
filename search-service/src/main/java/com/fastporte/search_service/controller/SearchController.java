@@ -28,22 +28,26 @@ public class SearchController {
 
         // Obtener carriers
         // cambiar URL
-        ResponseEntity<List<Carrier>> responseCarriers = restTemplate.exchange("http://localhost:8081/carriers", HttpMethod.GET, null, new ParameterizedTypeReference<List<Carrier>>() {});
+        ResponseEntity<List<Carrier>> responseCarriers = restTemplate.exchange("http://localhost:8092/carrier", HttpMethod.GET, null, new ParameterizedTypeReference<List<Carrier>>() {});
         List<Carrier> carriers = responseCarriers.getBody();
 
         // Obtener vehicles
         // cambiar URL
-        ResponseEntity<List<Vehicle>> responseVehicles = restTemplate.exchange("http://localhost:8081/carriers/vehicles", HttpMethod.GET, null, new ParameterizedTypeReference<List<Vehicle>>() {});
+        ResponseEntity<List<Vehicle>> responseVehicles = restTemplate.exchange("http://localhost:8092/carrier/vehicles", HttpMethod.GET, null, new ParameterizedTypeReference<List<Vehicle>>() {});
         List<Vehicle> vehicles = responseVehicles.getBody();
 
-        // Agrega los carriers a los vehicles
-        for (Vehicle vehicle : vehicles) {
-            Carrier carrier = carriers.stream()
-                    .filter(c -> c.getId().equals(vehicle.getCarrier().getId()))
-                    .findFirst()
-                    .orElse(null);
+        if(vehicles !=null) {
+            // Agrega los carriers a los vehicles
+            for (Vehicle vehicle : vehicles) {
+                Carrier carrier = carriers.stream()
+                        .filter(c -> c.getId().equals(vehicle.getCarrier().getId()))
+                        .findFirst()
+                        .orElse(null);
 
-            vehicle.setCarrier(carrier);
+                vehicle.setCarrier(carrier);
+            }
+        }else {
+            vehicles = new ArrayList<>();
         }
 
         return vehicles;
