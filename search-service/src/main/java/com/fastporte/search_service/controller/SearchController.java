@@ -18,19 +18,34 @@ public class SearchController {
 
     @Autowired
     SearchService searchService;
-   // @Autowired
-   // private RestTemplate restTemplate;
 
+    //obtener data de otro microservicio
+    public List<Vehicle> getVehiclesAndCarriers() {
 
+        //cambiar URL
+        String carriersUrl = "http://carrier-service/carriers";
+        List<Carrier> carriers = restTemplate.getForObject(carriersUrl, List.class);
+
+        //cambiar URL
+        String vehiclesUrl = "http://carrier-service/carriers/vehicles";
+        List<Vehicle> vehicles = restTemplate.getForObject(vehiclesUrl, List.class);
+
+        // Agrega los carriers a los vehicles
+        for (Vehicle vehicle : vehicles) {
+            Carrier carrier = carriers.stream()
+                    .filter(c -> c.getId().equals(vehicle.getCarrier().getId()))
+                    .findFirst()
+                    .orElse(null);
+
+            vehicle.setCarrier(carrier);
+        }
+
+        return vehicles;
+    }
     @GetMapping("/type")
     public List<Vehicle> searchTransportByType(@RequestParam String query) {
-        // Realiza una solicitud HTTP GET al endpoint de la otra API para obtener la lista de transportes
-        //String otherApiUrl = "http://otra-api.com/api/transport?name=" + name;
-        // List<Transport> transportList = restTemplate.getForObject(otherApiUrl, List.class);
         List<Vehicle> vehicleList = new ArrayList<>();
-
-        // Puedes aplicar cualquier lógica adicional que necesites en la lista de transportes obtenida
-        // Por ejemplo, podrías filtrar o manipular la lista según tus necesidades
+        vehicleList = getVehiclesAndCarriers();
         List<Vehicle> filteredVehicleList = searchService.filterTransportByVehicleType(vehicleList, query);
 
         return filteredVehicleList;
@@ -39,6 +54,7 @@ public class SearchController {
     @GetMapping("/quantity")
     public List<Vehicle> searchTransportByQuantity(@RequestParam Long query) {
         List<Vehicle> allVehicle = new ArrayList<>();
+        allVehicle = getVehiclesAndCarriers();
         List<Vehicle> filteredVehicleList = searchService.filterTransportByQuantity(allVehicle, query);
 
         return filteredVehicleList;
@@ -47,6 +63,7 @@ public class SearchController {
     @GetMapping("/region")
     public List<Vehicle> searchTransportByCarrierRegion(@RequestParam String query) {
         List<Vehicle> allVehicle = new ArrayList<>();
+        allVehicle = getVehiclesAndCarriers();
         List<Vehicle> filteredVehicleList = searchService.filterTransportByCarrierRegion(allVehicle, query);
 
         return filteredVehicleList;
@@ -55,6 +72,7 @@ public class SearchController {
     @GetMapping("/description")
     public List<Vehicle> searchTransportByCarrierDescription(@RequestParam String query) {
         List<Vehicle> allVehicle = new ArrayList<>();
+        allVehicle = getVehiclesAndCarriers();
         List<Vehicle> filteredVehicleList = searchService.filterTransportByCarrierDescription(allVehicle, query);
 
         return filteredVehicleList;
@@ -63,6 +81,7 @@ public class SearchController {
     @GetMapping("/phone")
     public List<Vehicle> searchTransportByCarrierPhone(@RequestParam String query) {
         List<Vehicle> allVehicle = new ArrayList<>();
+        allVehicle = getVehiclesAndCarriers();
         List<Vehicle> filteredVehicleList = searchService.filterTransportByCarrierPhone(allVehicle, query);
 
         return filteredVehicleList;
@@ -71,6 +90,7 @@ public class SearchController {
     @GetMapping("/username")
     public List<Vehicle> searchTransportByCarrierUsername(@RequestParam String query) {
         List<Vehicle> allVehicle = new ArrayList<>();
+        allVehicle = getVehiclesAndCarriers();
         List<Vehicle> filteredVehicleList = searchService.filterTransportByCarrierUsername(allVehicle, query);
 
         return filteredVehicleList;
@@ -79,6 +99,7 @@ public class SearchController {
     @GetMapping("/email")
     public List<Vehicle> searchTransportByCarrierEmail(@RequestParam String query) {
         List<Vehicle> allVehicle = new ArrayList<>();
+        allVehicle = getVehiclesAndCarriers();
         List<Vehicle> filteredVehicleList = searchService.filterTransportByCarrierEmail(allVehicle, query);
 
         return filteredVehicleList;
@@ -87,6 +108,7 @@ public class SearchController {
     @GetMapping("/fullname")
     public List<Vehicle> searchTransportByCarrierFullNameLike(@RequestParam String query) {
         List<Vehicle> allVehicle = new ArrayList<>();
+        allVehicle = getVehiclesAndCarriers();
         List<Vehicle> filteredVehicleList = searchService.filterTransportByCarrierFullNameLike(allVehicle, query);
 
         return filteredVehicleList;
