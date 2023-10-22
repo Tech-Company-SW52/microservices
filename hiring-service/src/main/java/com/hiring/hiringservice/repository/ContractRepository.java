@@ -7,13 +7,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ContractRepository extends JpaRepository<Contract, Long>
+    public interface ContractRepository extends JpaRepository<Contract, Long>
 {
-    List<Contract> findByDriverId(Long driverId);
-    List<Contract> findByAll();
-
-    List<Contract> findByClientId(Long clientId);
-
-    List<Contract> findByDriverIdAndClientId(Long driverId, Long clientId);
+//    List<Contract> findByDriverId(Long driverId);
+//    List<Contract> findByAll();
+//
+//    List<Contract> findByClientId(Long clientId);
+//
+//    List<Contract> findByDriverIdAndClientId(Long driverId, Long clientId);
 
 }

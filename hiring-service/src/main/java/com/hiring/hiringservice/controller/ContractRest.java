@@ -16,7 +16,6 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping("/contracts")
-
 public class ContractRest {
     @Autowired
     ContractService contractService;

@@ -46,19 +46,19 @@ public class ContractServiceImpl implements ContractService {
         return contractRepository.findById(id);
     }
 
-    @Override
-    public List<Contract> findByDriverId(Long driverId) throws Exception {
-        return contractRepository.findByDriverId(driverId);
-    }
-
-    @Override
-    public List<Contract> findByClientId(Long clientId) throws Exception {
-        return contractRepository.findByClientId(clientId);
-    }
-
-    @Override
-    public List<Contract> findByDriverIdAndClientId(Long driverId, Long clientId) throws Exception {
-        return contractRepository.findByDriverIdAndClientId(driverId, clientId);
-    }
+//    @Override
+//    public List<Contract> findByDriverId(Long driverId) throws Exception {
+//        return contractRepository.findByDriverId(driverId);
+//    }
+//
+//    @Override
+//    public List<Contract> findByClientId(Long clientId) throws Exception {
+//        return contractRepository.findByClientId(clientId);
+//    }
+//
+//    @Override
+//    public List<Contract> findByDriverIdAndClientId(Long driverId, Long clientId) throws Exception {
+//        return contractRepository.findByDriverIdAndClientId(driverId, clientId);
+//    }
 
 }
