@@ -10,5 +10,5 @@ public interface IClientService {
     public Client createClient(Client client);
     public Client updateClient(Client client);
     public Client deleteClient(Client client);
-    public  Client getClient(Long id);
+    public Client getClient(Long id);
 }

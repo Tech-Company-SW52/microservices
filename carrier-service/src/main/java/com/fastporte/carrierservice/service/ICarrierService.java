@@ -10,6 +10,6 @@ public interface ICarrierService {
     public Carrier createCarrier(Carrier carrier);
     public Carrier updateCarrier(Carrier carrier);
     public Carrier deleteCarrier(Carrier carrier);
-    public  Carrier getCarrier(Long id);
+    public Carrier getCarrier(Long id);
 
 }

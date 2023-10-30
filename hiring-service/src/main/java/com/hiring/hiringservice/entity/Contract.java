@@ -2,6 +2,8 @@ package com.hiring.hiringservice.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.hiring.hiringservice.model.Carrier;
+import com.hiring.hiringservice.model.Client;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,7 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.sql.Time;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name="contracts")
@@ -28,12 +30,6 @@ public class Contract implements Serializable {
     @Column(name="description", nullable = false)
     private String description;
 
-    //@Column(name="addess_id_from", nullable = false)
-    //private
-
-    //
-    //
-
     @Column(name="quantity", nullable = false)
     private String quantity;
 
@@ -41,7 +37,7 @@ public class Contract implements Serializable {
     private String subject;
 
     @Column(name="date", nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @Column(name="time_arrival", nullable = false)
     private Time timeArrival;
@@ -52,11 +48,11 @@ public class Contract implements Serializable {
     @Column(name="visible", nullable = false)
     private boolean visible;
 
-    //
-    //
+    @Transient
+    private Client client;
 
-    //
-    //
+    @Transient
+    private Carrier carrier;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_id")
@@ -67,7 +63,5 @@ public class Contract implements Serializable {
     @JoinColumn(name = "notification_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private Notification notifications;
-
-
 
 }

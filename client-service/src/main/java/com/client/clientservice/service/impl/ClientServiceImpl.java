@@ -57,7 +57,8 @@ public class ClientServiceImpl implements IClientService {
         if (clientDB == null) {
             return null;
         }
-        return clientRepository.save(clientDB);
+        clientRepository.deleteById(client.getId());
+        return clientDB;
     }
 
     @Override
