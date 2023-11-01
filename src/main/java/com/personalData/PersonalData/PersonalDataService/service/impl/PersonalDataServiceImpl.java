@@ -9,6 +9,7 @@ import com.personalData.PersonalData.PersonalDataService.repository.IPersonalDat
 import com.personalData.PersonalData.PersonalDataService.service.IPersonalDataService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -16,53 +17,60 @@ import org.springframework.stereotype.Service;
 public class PersonalDataServiceImpl implements IPersonalDataService {
 
     @Autowired
-    private IPersonalDataRepository personalDataRepository;
-
-    @Autowired
     private ClientClient clientClient;
 
     @Autowired
     private CarrierClient carrierClient;
 
-
     @Override
     public PersonalData getPersonalData(String userType, Long id) {
-        return personalDataRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        PersonalData personalData;
+        switch (userType) {
+            case "carrier":
+                CarrierData carrierData = carrierClient.getCarrierData(id).getBody();
+                personalData = convertToPersonalData(carrierData);
+                break;
+            case "client":
+                ClientData clientData = clientClient.getClientData(id).getBody();
+                personalData = convertToPersonalData(clientData);
+                break;
+            default:
+                throw new IllegalArgumentException("Tipo de usuario no válido: " + userType);
+        }
+        return personalData;
     }
 
     @Override
     public PersonalData updatePersonalData(String userType, Long id, PersonalData personalData) {
-        // Obtener datos existentes
         PersonalData existingData = getPersonalData(userType, id);
-
-        // Mapear datos personales
         updatePersonalDataFields(existingData, personalData);
 
-        // Sincronizar con microservicios externos
-        if ("carrier".equals(userType)) {
-            syncCarrierData(id, existingData);
-        } else if ("client".equals(userType)) {
-            syncClientData(id, existingData);
-        } else {
-            throw new IllegalArgumentException("Tipo de usuario no válido: " + userType);
+        switch (userType) {
+            case "carrier":
+                syncCarrierData(id, existingData);
+                break;
+            case "client":
+                syncClientData(id, existingData);
+                break;
+            default:
+                throw new IllegalArgumentException("Tipo de usuario no válido: " + userType);
         }
 
-        // Guardar datos actualizados en el repositorio
-        return personalDataRepository.save(existingData);
+        return existingData;
     }
 
     @Override
     public CarrierData syncCarrierData(Long userId, PersonalData personalData) {
-        //return carrierClient.updateCarrierData(userId, personalData.getCarrierData());
-        return null;
+        ResponseEntity<CarrierData> response = carrierClient.updateCarrier(userId, personalData.getCarrierData());
+        return response.getBody();
     }
 
     @Override
     public ClientData syncClientData(Long userId, PersonalData personalData) {
-        //return clientClient.updateClientData(userId, personalData.getClientData());
-        return null;
+        ResponseEntity<ClientData> response = clientClient.updateClient(userId, personalData.getClientData());
+        return response.getBody();
     }
+
 
     private void updatePersonalDataFields(PersonalData existingData, PersonalData newData) {
         // Actualizar datos personales
@@ -78,6 +86,18 @@ public class PersonalDataServiceImpl implements IPersonalDataService {
         existingData.setDescription(newData.getDescription());
         existingData.setClientData(newData.getClientData());
         existingData.setCarrierData(newData.getCarrierData());
+    }
+
+    private PersonalData convertToPersonalData(CarrierData carrierData) {
+        PersonalData personalData = new PersonalData();
+        // Implementa la lógica para asignar valores de carrierData a personalData
+        return personalData;
+    }
+
+    private PersonalData convertToPersonalData(ClientData clientData) {
+        PersonalData personalData = new PersonalData();
+        // Implementa la lógica para asignar valores de clientData a personalData
+        return personalData;
     }
 
 }

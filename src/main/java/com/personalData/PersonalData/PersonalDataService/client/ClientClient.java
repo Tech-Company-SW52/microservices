@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "client-service")
 public interface ClientClient {
     @GetMapping(value = "/client/{id}")
-    ResponseEntity<ClientData> getClient(@PathVariable("id") long id);
+    ResponseEntity<ClientData> getClientData(@PathVariable("id") long id);
 
     @PutMapping(value = "/client/{id}")
     ResponseEntity<ClientData> updateClient(@PathVariable("id") long id, @RequestBody ClientData client);
