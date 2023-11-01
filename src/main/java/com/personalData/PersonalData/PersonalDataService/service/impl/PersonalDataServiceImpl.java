@@ -26,22 +26,27 @@ public class PersonalDataServiceImpl implements IPersonalDataService {
 
 
     @Override
-    public PersonalData getPersonalData(Long id) {
+    public PersonalData getPersonalData(String userType, Long id) {
         return personalDataRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
     @Override
-    public PersonalData updatePersonalData(Long id, PersonalData personalData) {
+    public PersonalData updatePersonalData(String userType, Long id, PersonalData personalData) {
         // Obtener datos existentes
-        PersonalData existingData = getPersonalData(id);
+        PersonalData existingData = getPersonalData(userType, id);
 
         // Mapear datos personales
         updatePersonalDataFields(existingData, personalData);
 
         // Sincronizar con microservicios externos
-        syncCarrierData(id, existingData);
-        syncClientData(id, existingData);
+        if ("carrier".equals(userType)) {
+            syncCarrierData(id, existingData);
+        } else if ("client".equals(userType)) {
+            syncClientData(id, existingData);
+        } else {
+            throw new IllegalArgumentException("Tipo de usuario no válido: " + userType);
+        }
 
         // Guardar datos actualizados en el repositorio
         return personalDataRepository.save(existingData);

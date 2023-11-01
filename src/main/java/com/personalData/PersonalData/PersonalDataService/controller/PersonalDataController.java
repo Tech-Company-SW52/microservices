@@ -10,19 +10,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/personal-data")
 public class PersonalDataController {
-
     @Autowired
     private PersonalDataServiceImpl personalDataService;
 
-    // Obtener datos personales del usuario por ID
-    @GetMapping("/{id}")
-    public ResponseEntity<PersonalData> getUserData(@PathVariable Long id) {
-        return ResponseEntity.ok(personalDataService.getPersonalData(id));
+    // Obtener datos personales del usuario por ID y tipo de usuario
+    @GetMapping("/{userType}/{id}")
+    public ResponseEntity<PersonalData> getUserData(@PathVariable String userType, @PathVariable Long id) {
+        return ResponseEntity.ok(personalDataService.getPersonalData(userType, id));
     }
 
-    // Actualizar datos personales del usuario por ID
-    @PutMapping("/{id}")
-    public ResponseEntity<PersonalData> updateUserData(@PathVariable Long id, @RequestBody PersonalData personalData) {
-        return ResponseEntity.ok(personalDataService.updatePersonalData(id, personalData));
+    // Actualizar datos personales del usuario por ID y tipo de usuario
+    @PutMapping("/{userType}/{id}")
+    public ResponseEntity<PersonalData> updateUserData(@PathVariable String userType, @PathVariable Long id, @RequestBody PersonalData personalData) {
+        return ResponseEntity.ok(personalDataService.updatePersonalData(userType, id, personalData));
     }
 }
