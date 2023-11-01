@@ -1,13 +1,16 @@
 package com.personalData.PersonalData.PersonalDataService.service.impl;
 
+import com.personalData.PersonalData.PersonalDataService.client.CarrierClient;
+import com.personalData.PersonalData.PersonalDataService.client.ClientClient;
 import com.personalData.PersonalData.PersonalDataService.entity.PersonalData;
+import com.personalData.PersonalData.PersonalDataService.model.CarrierData;
+import com.personalData.PersonalData.PersonalDataService.model.ClientData;
 import com.personalData.PersonalData.PersonalDataService.repository.IPersonalDataRepository;
 import com.personalData.PersonalData.PersonalDataService.service.IPersonalDataService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PersonalDataServiceImpl implements IPersonalDataService {
@@ -15,37 +18,61 @@ public class PersonalDataServiceImpl implements IPersonalDataService {
     @Autowired
     private IPersonalDataRepository personalDataRepository;
 
+    @Autowired
+    private ClientClient clientClient;
+
+    @Autowired
+    private CarrierClient carrierClient;
+
+
     @Override
-    public List<PersonalData> findAll() {
-        return personalDataRepository.findAll();
+    public PersonalData getPersonalData(Long id) {
+        return personalDataRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
     @Override
-    public PersonalData get(Long id) {
-        Optional<PersonalData> dataOpt = personalDataRepository.findById(id);
-        return dataOpt.orElse(null);
+    public PersonalData updatePersonalData(Long id, PersonalData personalData) {
+        // Obtener datos existentes
+        PersonalData existingData = getPersonalData(id);
+
+        // Mapear datos personales
+        updatePersonalDataFields(existingData, personalData);
+
+        // Sincronizar con microservicios externos
+        syncCarrierData(id, existingData);
+        syncClientData(id, existingData);
+
+        // Guardar datos actualizados en el repositorio
+        return personalDataRepository.save(existingData);
     }
 
     @Override
-    public PersonalData create(PersonalData personalData) {
-        return (PersonalData) personalDataRepository.save(personalData);
+    public CarrierData syncCarrierData(Long userId, PersonalData personalData) {
+        //return carrierClient.updateCarrierData(userId, personalData.getCarrierData());
+        return null;
     }
 
     @Override
-    public PersonalData update(PersonalData personalData) {
-        if(personalData.getId() == null || !personalDataRepository.existsById(personalData.getId())) {
-            return null; // o puedes lanzar una excepción
-        }
-        return (PersonalData) personalDataRepository.save(personalData);
+    public ClientData syncClientData(Long userId, PersonalData personalData) {
+        //return clientClient.updateClientData(userId, personalData.getClientData());
+        return null;
     }
 
-    @Override
-    public void delete(PersonalData personalData) {
-        personalDataRepository.delete(personalData);
+    private void updatePersonalDataFields(PersonalData existingData, PersonalData newData) {
+        // Actualizar datos personales
+        existingData.setFirstName(newData.getFirstName());
+        existingData.setLastName(newData.getLastName());
+        existingData.setUsername(newData.getUsername());
+        existingData.setPhotoUrl(newData.getPhotoUrl());
+        existingData.setEmail(newData.getEmail());
+        existingData.setPassword(newData.getPassword());
+        existingData.setPhone(newData.getPhone());
+        existingData.setRegion(newData.getRegion());
+        existingData.setBirthdate(newData.getBirthdate());
+        existingData.setDescription(newData.getDescription());
+        existingData.setClientData(newData.getClientData());
+        existingData.setCarrierData(newData.getCarrierData());
     }
 
-    @Override
-    public PersonalData findByEmailAndPassword(String email, String password) {
-        return personalDataRepository.findByEmailAndPassword(email, password);
-    }
 }
