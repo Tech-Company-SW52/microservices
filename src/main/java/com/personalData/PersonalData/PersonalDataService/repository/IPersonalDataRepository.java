@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IPersonalDataRepository extends JpaRepository<PersonalData, Long> {
-    public PersonalData findByEmailAndPassword(String email, String password);
+
 }

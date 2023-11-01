@@ -13,9 +13,4 @@ public class PersonalDataApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PersonalDataApplication.class, args);
 	}
-
-	@Bean
-	public DataInitializer dataInitializer() {
-		return new DataInitializer();
-	}
 }

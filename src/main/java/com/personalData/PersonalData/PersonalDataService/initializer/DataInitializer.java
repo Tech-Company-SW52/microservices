@@ -2,24 +2,49 @@ package com.personalData.PersonalData.PersonalDataService.initializer;
 
 import com.personalData.PersonalData.PersonalDataService.entity.PersonalData;
 import com.personalData.PersonalData.PersonalDataService.repository.IPersonalDataRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public class DataInitializer implements ApplicationListener<ContextRefreshedEvent> {
-    @Autowired
-    public IPersonalDataRepository personalDataRepository;
+@Component
+public class DataInitializer implements CommandLineRunner {
+    private final IPersonalDataRepository personalDataRepository;
+
+    public DataInitializer(IPersonalDataRepository personalDataRepository) {
+        this.personalDataRepository = personalDataRepository;
+    }
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    public void run(String... args) {
         if (personalDataRepository.count() == 0) {
             List<PersonalData> personalDataList = List.of(
-                    // Datos de ejemplo
-                    new PersonalData(null, "John", "Doe", "johndoe", "url", "john@example.com", "password", "1234567890", "North", LocalDate.of(1990, 1, 1), "Description", null, null),
-                    new PersonalData(null, "Jane", "Doe", "janedoe", "url", "jane@example.com", "password", "0987654321", "South", LocalDate.of(1992, 2, 2), "Description", null, null)
+                    PersonalData.builder()
+                            .firstName("John")
+                            .lastName("Doe")
+                            .username("johndoe")
+                            .photoUrl("john-doe.jpg")
+                            .email("john@doe.com")
+                            .password("123456")
+                            .phone("123456789")
+                            .region("Lima")
+                            .birthdate(LocalDate.of(1990, 1, 1))
+                            .description("I'm John Doe")
+                            .build(),
+                    PersonalData.builder()
+                            .firstName("Jane")
+                            .lastName("Doe")
+                            .username("janedoe")
+                            .photoUrl("jane-doe.jpg")
+                            .email("jane@doe.com")
+                            .password("123456")
+                            .phone("123456789")
+                            .region("Lima")
+                            .birthdate(LocalDate.of(1990, 1, 1))
+                            .description("I'm Jane Doe")
+                            .build()
             );
 
             personalDataRepository.saveAll(personalDataList);
