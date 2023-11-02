@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+/**
+ * Modelo de datos para clientes.
+ */
 @Data
 @Builder
 public class ClientData {

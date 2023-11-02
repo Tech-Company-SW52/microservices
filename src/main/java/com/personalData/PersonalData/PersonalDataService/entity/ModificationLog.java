@@ -5,7 +5,11 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-// Esta clase es una entidad que representa un registro de modificación en la base de datos.
+/**
+ * Entidad que registra los cambios realizados en los datos personales.
+ * Cada instancia representa una modificación, capturando el tipo de
+ * dato modificado, el campo, los valores anterior y nuevo, y la fecha de modificación.
+ */
 @Data
 @Entity
 @Table(name = "modification_log")

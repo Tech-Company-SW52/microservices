@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+/**
+ * Este cliente Feign se comunica con el servicio externo de carriers.
+ * Permite obtener y actualizar la información de los transportistas utilizando llamadas
+ * HTTP a través de la red.
+ */
 @FeignClient(name = "carrier-service")
 public interface CarrierClient {
 

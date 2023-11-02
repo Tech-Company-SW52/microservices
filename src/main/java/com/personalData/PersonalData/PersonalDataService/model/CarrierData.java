@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+/**
+ * Modelo de datos para transportistas.
+ */
 @Data
 @Builder
 public class CarrierData {

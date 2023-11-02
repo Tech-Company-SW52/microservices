@@ -9,7 +9,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-// Esta clase implementa la interfaz IPersonalDataService y define los métodos para manejar los datos personales.
+/**
+ * Esta clase implementa la interfaz IPersonalDataService y define los métodos para manejar los datos personales.
+ * Se encarga de la lógica de negocio relacionada con los datos personales de usuarios tipo "carrier" y "client".
+ * Dependiendo del tipo de usuario, esta clase interactúa con los clientes correspondientes (CarrierClient o ClientClient)
+ * para obtener y actualizar los datos personales a través de servicios externos.
+ */
 @Service
 public class PersonalDataServiceImpl implements IPersonalDataService {
 

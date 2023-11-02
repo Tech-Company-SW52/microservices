@@ -1,7 +1,5 @@
 package com.personalData.PersonalData.PersonalDataService.entity;
 
-import com.personalData.PersonalData.PersonalDataService.model.CarrierData;
-import com.personalData.PersonalData.PersonalDataService.model.ClientData;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +9,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+/**
+ * Entidad que representa los datos personales de un usuario.
+ */
 @Entity
 @Table(name = "personal_data")
 @Data
