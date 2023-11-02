@@ -1,11 +1,11 @@
 package com.fastporte.search_service.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fastporte.search_service.model.Carrier;
+import lombok.*;
 
+@Data
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
