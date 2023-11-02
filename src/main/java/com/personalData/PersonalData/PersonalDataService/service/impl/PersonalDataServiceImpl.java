@@ -2,13 +2,10 @@ package com.personalData.PersonalData.PersonalDataService.service.impl;
 
 import com.personalData.PersonalData.PersonalDataService.client.CarrierClient;
 import com.personalData.PersonalData.PersonalDataService.client.ClientClient;
-import com.personalData.PersonalData.PersonalDataService.entity.PersonalData;
 import com.personalData.PersonalData.PersonalDataService.model.CarrierData;
 import com.personalData.PersonalData.PersonalDataService.model.ClientData;
 import com.personalData.PersonalData.PersonalDataService.service.IPersonalDataService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -30,58 +27,28 @@ public class PersonalDataServiceImpl implements IPersonalDataService {
     }
 
     @Override
-    public PersonalData getPersonalData(String userType, Long id) {
-        PersonalData personalData;
-        switch (userType) {
-            case "carrier":
-                CarrierData carrierData = carrierClient.getCarrierData(id).getBody();
-                personalData = convertToPersonalData(carrierData);
-                break;
-            case "client":
-                ClientData clientData = clientClient.getClientData(id).getBody();
-                personalData = convertToPersonalData(clientData);
-                break;
-            default:
-                throw new IllegalArgumentException("Tipo de usuario no válido: " + userType);
-        }
-        return personalData;
-    }
-
-    @Override
-    public PersonalData updatePersonalData(String userType, Long id, PersonalData personalData) {
-        // En lugar de obtener datos existentes, simplemente sincronizamos con los otros servicios
+    public Object getPersonalData(String userType, Long id) {
         switch (userType) {
             case CARRIER:
-                return convertToPersonalData(syncCarrierData(id, personalData));
+                ResponseEntity<CarrierData> carrierResponse = carrierClient.getCarrierData(id);
+                return carrierResponse.getBody();
             case CLIENT:
-                return convertToPersonalData(syncClientData(id, personalData));
+                ResponseEntity<ClientData> clientResponse = clientClient.getClientData(id);
+                return clientResponse.getBody();
             default:
                 throw new IllegalArgumentException("Tipo de usuario no válido: " + userType);
         }
     }
 
     @Override
-    public CarrierData syncCarrierData(Long userId, PersonalData personalData) {
-        ResponseEntity<CarrierData> response = carrierClient.updateCarrier(userId, personalData.getCarrierData());
-        return response.getBody();
-    }
-
-    @Override
-    public ClientData syncClientData(Long userId, PersonalData personalData) {
-        ResponseEntity<ClientData> response = clientClient.updateClient(userId, personalData.getClientData());
-        return response.getBody();
-    }
-
-
-    private void updatePersonalDataFields(PersonalData existingData, PersonalData newData) {
-        BeanUtils.copyProperties(newData, existingData, "id"); // Ignora el campo "id"
-    }
-
-    private PersonalData convertToPersonalData(CarrierData carrierData) {
-        return modelMapper.map(carrierData, PersonalData.class);
-    }
-
-    private PersonalData convertToPersonalData(ClientData clientData) {
-        return modelMapper.map(clientData, PersonalData.class);
+    public Object updatePersonalData(String userType, Long id, Object personalData) {
+        switch (userType) {
+            case CARRIER:
+                return carrierClient.updateCarrier(id, (CarrierData) personalData).getBody();
+            case CLIENT:
+                return clientClient.updateClient(id, (ClientData) personalData).getBody();
+            default:
+                throw new IllegalArgumentException("Tipo de usuario no válido: " + userType);
+        }
     }
 }
