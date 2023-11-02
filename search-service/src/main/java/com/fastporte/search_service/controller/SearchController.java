@@ -1,5 +1,7 @@
 package com.fastporte.search_service.controller;
-import com.fastporte.search_service.entity.Carrier;
+import com.fastporte.search_service.client.CarrierClient;
+
+import com.fastporte.search_service.model.Carrier;
 import com.fastporte.search_service.entity.Vehicle;
 import com.fastporte.search_service.service.SearchService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,19 +24,16 @@ public class SearchController {
     @Autowired
     SearchService searchService;
 
+    @Autowired
+    CarrierClient carrierClient;
+
     //obtener data de otro microservicio
     public List<Vehicle> getVehiclesAndCarriers() {
 
-        RestTemplate restTemplate = new RestTemplate();
-
-        // Obtener carriers
-        // cambiar URL
-        ResponseEntity<List<Carrier>> responseCarriers = restTemplate.exchange("http://localhost:8092/carrier", HttpMethod.GET, null, new ParameterizedTypeReference<List<Carrier>>() {});
+        ResponseEntity<List<Carrier>> responseCarriers = carrierClient.listAllCarriers();
         List<Carrier> carriers = responseCarriers.getBody();
 
-        // Obtener vehicles
-        // cambiar URL
-        ResponseEntity<List<Vehicle>> responseVehicles = restTemplate.exchange("http://localhost:8092/carrier/vehicles", HttpMethod.GET, null, new ParameterizedTypeReference<List<Vehicle>>() {});
+        ResponseEntity<List<Vehicle>> responseVehicles = carrierClient.listAllVehicles();
         List<Vehicle> vehicles = responseVehicles.getBody();
 
         if(vehicles !=null) {
