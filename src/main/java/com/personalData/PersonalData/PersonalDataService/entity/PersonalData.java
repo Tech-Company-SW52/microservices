@@ -52,10 +52,4 @@ public class PersonalData implements Serializable {
 
     @Column(name = "description", nullable = false)
     private String description;
-
-    @Transient
-    private ClientData clientData;
-
-    @Transient
-    private CarrierData carrierData;
 }

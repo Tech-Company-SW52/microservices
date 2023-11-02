@@ -5,22 +5,29 @@ import com.personalData.PersonalData.PersonalDataService.client.ClientClient;
 import com.personalData.PersonalData.PersonalDataService.entity.PersonalData;
 import com.personalData.PersonalData.PersonalDataService.model.CarrierData;
 import com.personalData.PersonalData.PersonalDataService.model.ClientData;
-import com.personalData.PersonalData.PersonalDataService.repository.IPersonalDataRepository;
 import com.personalData.PersonalData.PersonalDataService.service.IPersonalDataService;
-import jakarta.persistence.EntityNotFoundException;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-
+// Esta clase implementa la interfaz IPersonalDataService y define los métodos para manejar los datos personales.
 @Service
 public class PersonalDataServiceImpl implements IPersonalDataService {
 
-    @Autowired
-    private ClientClient clientClient;
+    private static final String CARRIER = "carrier";
+    private static final String CLIENT = "client";
 
-    @Autowired
-    private CarrierClient carrierClient;
+    private final ClientClient clientClient;
+    private final CarrierClient carrierClient;
+    private final ModelMapper modelMapper;
+
+    public PersonalDataServiceImpl(ClientClient clientClient, CarrierClient carrierClient, ModelMapper modelMapper) {
+        this.clientClient = clientClient;
+        this.carrierClient = carrierClient;
+        this.modelMapper = modelMapper;
+    }
 
     @Override
     public PersonalData getPersonalData(String userType, Long id) {
@@ -42,21 +49,15 @@ public class PersonalDataServiceImpl implements IPersonalDataService {
 
     @Override
     public PersonalData updatePersonalData(String userType, Long id, PersonalData personalData) {
-        PersonalData existingData = getPersonalData(userType, id);
-        updatePersonalDataFields(existingData, personalData);
-
+        // En lugar de obtener datos existentes, simplemente sincronizamos con los otros servicios
         switch (userType) {
-            case "carrier":
-                syncCarrierData(id, existingData);
-                break;
-            case "client":
-                syncClientData(id, existingData);
-                break;
+            case CARRIER:
+                return convertToPersonalData(syncCarrierData(id, personalData));
+            case CLIENT:
+                return convertToPersonalData(syncClientData(id, personalData));
             default:
                 throw new IllegalArgumentException("Tipo de usuario no válido: " + userType);
         }
-
-        return existingData;
     }
 
     @Override
@@ -73,31 +74,14 @@ public class PersonalDataServiceImpl implements IPersonalDataService {
 
 
     private void updatePersonalDataFields(PersonalData existingData, PersonalData newData) {
-        // Actualizar datos personales
-        existingData.setFirstName(newData.getFirstName());
-        existingData.setLastName(newData.getLastName());
-        existingData.setUsername(newData.getUsername());
-        existingData.setPhotoUrl(newData.getPhotoUrl());
-        existingData.setEmail(newData.getEmail());
-        existingData.setPassword(newData.getPassword());
-        existingData.setPhone(newData.getPhone());
-        existingData.setRegion(newData.getRegion());
-        existingData.setBirthdate(newData.getBirthdate());
-        existingData.setDescription(newData.getDescription());
-        existingData.setClientData(newData.getClientData());
-        existingData.setCarrierData(newData.getCarrierData());
+        BeanUtils.copyProperties(newData, existingData, "id"); // Ignora el campo "id"
     }
 
     private PersonalData convertToPersonalData(CarrierData carrierData) {
-        PersonalData personalData = new PersonalData();
-        // Implementa la lógica para asignar valores de carrierData a personalData
-        return personalData;
+        return modelMapper.map(carrierData, PersonalData.class);
     }
 
     private PersonalData convertToPersonalData(ClientData clientData) {
-        PersonalData personalData = new PersonalData();
-        // Implementa la lógica para asignar valores de clientData a personalData
-        return personalData;
+        return modelMapper.map(clientData, PersonalData.class);
     }
-
 }
