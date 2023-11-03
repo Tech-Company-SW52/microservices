@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Slf4j
 @Service
 public class StatusServiceImpl implements IStatusService {
@@ -22,5 +25,25 @@ public class StatusServiceImpl implements IStatusService {
         Contract contract = contractRepository.findById(id).get();
         contract.getStatus().setStatus(status);
         return contract;
+    }
+
+    @Override
+    public StatusContract save(StatusContract statusContract) {
+        return statusContractRepository.save(statusContract);
+    }
+
+    @Override
+    public void delete(Long id) {
+        statusContractRepository.deleteById(id);
+    }
+
+    @Override
+    public List<StatusContract> getAll() {
+        return statusContractRepository.findAll();
+    }
+
+    @Override
+    public Optional<StatusContract> getById(Long id) {
+        return statusContractRepository.findById(id);
     }
 }

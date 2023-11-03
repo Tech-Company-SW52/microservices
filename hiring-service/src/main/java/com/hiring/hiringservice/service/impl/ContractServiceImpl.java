@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -133,4 +134,12 @@ public class ContractServiceImpl implements IContractService {
         return contractRepository.findByCarrierId(id);
     }
 
+    @Override
+    public Optional<Contract> getById(Long id)  {
+        return contractRepository.findById(id);
+    }
+    @Override
+    public Contract save(Contract contract) {
+        return contractRepository.save(contract);
+    }
 }

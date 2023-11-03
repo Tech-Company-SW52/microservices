@@ -3,6 +3,7 @@ package com.hiring.hiringservice.service;
 import com.hiring.hiringservice.entity.Contract;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IContractService {
     List<Contract> findContractAll();
@@ -13,5 +14,7 @@ public interface IContractService {
     List<Contract> findContractsByCarrierId(Long carrierId);
     List<Contract> findByStatusStatusAndCarrierId(String status, Long id);
     List<Contract> findByCarrierId(Long id);
+    Optional<Contract> getById(Long id);
+    Contract save(Contract contract);
 
 }
