@@ -28,60 +28,45 @@ public class ContractRest {
 
     @GetMapping
     public ResponseEntity<List<Contract>> findAllContracts() {
-        try {
-            List<Contract> contracts = contractService.findContractAll();
-            if (contracts.isEmpty()) {
-                return ResponseEntity.noContent().build();
-            } else {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        List<Contract> contracts = contractService.findContractAll();
+        if (contracts.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
+        return ResponseEntity.ok(contracts);
     }
 
     @GetMapping(value = "/offer/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Contract>> findOfferContracts(@PathVariable("id") Long id) {
-        try {
-            List<Contract> contracts = contractService.findOfferContract(id);
-            if (contracts.isEmpty()) {
-                return ResponseEntity.noContent().build();
-            } else {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        List<Contract> contracts = contractService.findByCarrierId(id);
+        if (contracts.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
+        return ResponseEntity.ok(contracts);
     }
+
 
     @GetMapping(value = "/pending/{user}/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Contract>> findPendingContractsByUser(@PathVariable("user") String user,
                                                                      @PathVariable("id") Long id) {
-        try {
-            List<Contract> contracts = contractService.findPendingContract(id, user);
-            if (contracts.isEmpty()) {
-                return ResponseEntity.noContent().build();
-            } else {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+
+        List<Contract> contracts = contractService.findPendingContract(id, user);
+        if (contracts.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
+        return ResponseEntity.ok(contracts);
     }
 
     @GetMapping(value = "/history/{user}/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Contract>> findHistoryContractsByUser(@PathVariable("user") String user,
                                                                      @PathVariable("id") Long id) {
-        try {
-            List<Contract> contracts = contractService.findHistoryContract(id, user);
-            if (contracts.isEmpty()) {
-                return ResponseEntity.noContent().build();
-            } else {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        
+        List<Contract> contracts = contractService.findHistoryContract(id, user);
+        if (contracts.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
+        return ResponseEntity.ok(contracts);
     }
 
     @PostMapping(value = "/add/{clientId}/{carrierId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

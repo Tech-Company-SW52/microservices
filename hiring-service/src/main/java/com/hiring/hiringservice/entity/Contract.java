@@ -48,11 +48,11 @@ public class Contract implements Serializable {
     @Column(name="visible", nullable = false)
     private boolean visible;
 
-    @Transient
-    private Client client;
+    @Column(name="client_id", nullable = false)
+    private Long clientId;
 
-    @Transient
-    private Carrier carrier;
+    @Column(name="carrier_id", nullable = false)
+    private Long carrierId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_id")

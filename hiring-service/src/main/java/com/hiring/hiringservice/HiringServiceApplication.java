@@ -22,4 +22,5 @@ public class HiringServiceApplication {
 	public NotificationInitializer intitialzer2() {
 		return new NotificationInitializer();
 	}
+
 }

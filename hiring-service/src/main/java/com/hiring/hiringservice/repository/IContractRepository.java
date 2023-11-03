@@ -8,4 +8,7 @@ import java.util.List;
 
 @Repository
 public interface IContractRepository extends JpaRepository<Contract, Long> {
+
+    List<Contract> findByStatusStatusAndCarrierId(String status, Long id);
+    List<Contract> findByCarrierId(Long id);
 }
