@@ -29,7 +29,7 @@ spring:
           uri: lb://hiring-service
           predicates:
             - Path=/hiring/contracts/**
-        - id: personalData-service
-          uri: lb://personalData-service
+        - id: personaldata-service
+          uri: lb://personaldata-service
           predicates:
             - Path=/personal-data/**
