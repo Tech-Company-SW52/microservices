@@ -1,10 +1,10 @@
-package com.personalData.PersonalData;
+package com.personaldata.personaldataservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PersonalDataApplicationTests {
+class PersonaldataServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
