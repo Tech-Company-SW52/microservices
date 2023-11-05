@@ -7,16 +7,18 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class Client {
+public class User {
     private Long id;
     private String firstName;
     private String lastName;
     private String username;
-    private String photoUrl;
     private String email;
     private String password;
-    private String phone;
-    private String region;
     private LocalDate birthdate;
     private String description;
+    private String photoUrl;
+    private String phone;
+    private Type type;
+    private String street;
+    private int stars;
 }

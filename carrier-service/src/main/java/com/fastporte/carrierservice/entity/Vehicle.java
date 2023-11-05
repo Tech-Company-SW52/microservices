@@ -19,8 +19,8 @@ public class Vehicle implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "carrier_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Carrier carrier;
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    private User carrier;
 
     @Column(name = "photo", nullable = false)
     private String photo;

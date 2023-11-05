@@ -2,7 +2,6 @@ package com.fastporte.carrierservice.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.lang.Nullable;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -13,8 +12,9 @@ import java.time.LocalDate;
 
 @Data
 @Entity
-@Table(name = "carriers")
-public class Carrier  implements Serializable {
+@Table(name = "users")
+public class User implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,9 +31,6 @@ public class Carrier  implements Serializable {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "photo_url")
-    private String photoUrl;
-
     @NotEmpty(message = "El correo no puede ser vacío")
     @Email(message = "No es una dirección de correo bien formada")
     @Column(unique = true, nullable = false)
@@ -44,19 +41,33 @@ public class Carrier  implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @NotEmpty(message = "El número de teléfono no puede ser vacío")
-    @Size(min = 9, max = 9, message = "El tamaño del número de teléfono es 9")
-    @Column(name = "phone", nullable = false)
-    private String phone;
-
-    @NotEmpty(message = "La región no puede ser vacía")
-    @Column(name = "region", nullable = false)
-    private String region;
-
-    @NotNull(message = "La fecha de nacimiento no puede ser vacía")
+    @NotNull
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthdate;
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "photo_url")
+    private String photoUrl;
+
+    @NotEmpty(message = "El número de teléfono no puede ser vacío")
+    @Size(min = 9, max = 9, message = "El tamaño del número de teléfono es 9")
+    @Column(name = "phone", nullable = false)
+    private String phone;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private Type type;
+
+    // @NotEmpty(message = "El distrito no puede ser vacío")
+    // @Column(name = "district_id")
+    // private Long districtId;
+
+    @NotEmpty(message = "La región no puede ser vacía")
+    @Column(name = "street", nullable = false)
+    private String street;
+
+    @Column(name = "stars")
+    private int stars;
 }

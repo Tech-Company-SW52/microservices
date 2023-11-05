@@ -3,14 +3,12 @@ package com.fastporte.carrierservice.service.impl;
 import com.fastporte.carrierservice.entity.Experience;
 import com.fastporte.carrierservice.repository.IExperienceRepository;
 import com.fastporte.carrierservice.service.IExperienceService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@Slf4j
 public class ExperienceServiceImpl implements IExperienceService {
 
     @Autowired

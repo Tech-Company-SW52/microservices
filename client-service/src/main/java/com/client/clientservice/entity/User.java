@@ -1,7 +1,9 @@
 package com.client.clientservice.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -12,8 +14,11 @@ import jakarta.validation.constraints.Size;
 
 @Data
 @Entity
-@Table(name = "clients")
-public class Client implements Serializable {
+@Builder
+@Table(name = "users")
+@AllArgsConstructor
+@NoArgsConstructor
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,9 +36,6 @@ public class Client implements Serializable {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "photo_url")
-    private String photoUrl;
-
     @NotEmpty(message = "El correo no puede ser vacío")
     @Email(message = "No es una dirección de correo bien formada")
     @Column(unique = true, nullable = false)
@@ -44,11 +46,6 @@ public class Client implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @NotEmpty(message = "El número de teléfono no puede ser vacío")
-    @Size(min = 9, max = 9, message = "El tamaño del número de teléfono es 9")
-    @Column(name = "phone", nullable = false)
-    private String phone;
-
     @NotNull
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthdate;
@@ -56,7 +53,26 @@ public class Client implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "photo_url")
+    private String photoUrl;
+
+    @NotEmpty(message = "El número de teléfono no puede ser vacío")
+    @Size(min = 9, max = 9, message = "El tamaño del número de teléfono es 9")
+    @Column(name = "phone", nullable = false)
+    private String phone;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private Type type;
+
+    // @NotEmpty(message = "El distrito no puede ser vacío")
+    // @Column(name = "district_id")
+    // private Long districtId;
+
     @NotEmpty(message = "La región no puede ser vacía")
-    @Column(name = "region", nullable = false)
-    private String region;
+    @Column(name = "street", nullable = false)
+    private String street;
+
+    @Column(name = "stars")
+    private int stars;
 }

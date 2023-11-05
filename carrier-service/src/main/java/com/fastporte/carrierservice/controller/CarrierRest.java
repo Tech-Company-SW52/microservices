@@ -1,6 +1,6 @@
 package com.fastporte.carrierservice.controller;
 
-import com.fastporte.carrierservice.entity.Carrier;
+import com.fastporte.carrierservice.entity.User;
 import com.fastporte.carrierservice.entity.Comment;
 import com.fastporte.carrierservice.entity.Experience;
 import com.fastporte.carrierservice.entity.Vehicle;
@@ -39,10 +39,10 @@ public class CarrierRest {
 
     @Autowired
     CommentServiceImpl commentService;
-    
+
     @GetMapping
-    public ResponseEntity<List<Carrier>> listAllCarriers() {
-        List<Carrier> carriers = carrierService.findCarrierAll();
+    public ResponseEntity<List<User>> listAllCarriers() {
+        List<User> carriers = carrierService.findCarrierAll();
         if (carriers.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -50,9 +50,9 @@ public class CarrierRest {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Carrier> getCarrier(@PathVariable("id") Long id) {
+    public ResponseEntity<User> getCarrier(@PathVariable("id") Long id) {
         log.info("Fetching Carrier with id {}", id);
-        Carrier carrier = carrierService.getCarrier(id);
+        User carrier = carrierService.getCarrier(id);
         if (carrier == null) {
             log.error("Carrier with id {} not found.", id);
             return ResponseEntity.notFound().build();
@@ -61,9 +61,10 @@ public class CarrierRest {
     }
 
     @GetMapping(value = "/searchEmailAndPassword/{email}/{password}")
-    public ResponseEntity<Carrier> getCarrierByEmailAndPassword(@PathVariable("email") String email, @PathVariable("password") String password) {
+    public ResponseEntity<User> getCarrierByEmailAndPassword(
+            @PathVariable("email") String email, @PathVariable("password") String password) {
         log.info("Fetching Carrier with email {} and password {}", email, password);
-        Carrier carrier = carrierService.findByEmailAndPassword(email, password);
+        User carrier = carrierService.findByEmailAndPassword(email, password);
         if (carrier == null) {
             log.error("Carrier with email {} and password {} not found.", email, password);
             return ResponseEntity.notFound().build();
@@ -72,19 +73,19 @@ public class CarrierRest {
     }
 
     @PostMapping
-    public ResponseEntity<Carrier> createCarrier(@Valid @RequestBody Carrier carrier, BindingResult result){
+    public ResponseEntity<User> createCarrier(@Valid @RequestBody User carrier, BindingResult result) {
         log.info("Creating Carrier : {}", carrier);
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
-        Carrier carrierDB = carrierService.createCarrier(carrier);
+        User carrierDB = carrierService.createCarrier(carrier);
         return ResponseEntity.ok(carrierDB);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Carrier> updateCarrier(@PathVariable("id") long id, @RequestBody Carrier carrier) {
+    public ResponseEntity<User> updateCarrier(@PathVariable("id") long id, @RequestBody User carrier) {
         log.info("Updating Carrier with id {}", id);
-        Carrier currentCarrier = carrierService.getCarrier(id);
+        User currentCarrier = carrierService.getCarrier(id);
         if (currentCarrier == null) {
             log.error("Unable to update. Carrier with id {} not found.", id);
             return ResponseEntity.notFound().build();
@@ -95,9 +96,9 @@ public class CarrierRest {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Carrier> deleteCarrier(@PathVariable("id") long id) {
+    public ResponseEntity<User> deleteCarrier(@PathVariable("id") long id) {
         log.info("Fetching & Deleting Carrier with id {}", id);
-        Carrier carrier = carrierService.getCarrier(id);
+        User carrier = carrierService.getCarrier(id);
         if (carrier == null) {
             log.error("Unable to delete. Carrier with id {} not found.", id);
             return ResponseEntity.notFound().build();
@@ -137,7 +138,8 @@ public class CarrierRest {
     }
 
     @GetMapping(value = "/{id}/vehicles/{vehicleId}")
-    public ResponseEntity<Vehicle> getVehicleByDriverId(@PathVariable("id") Long id, @PathVariable("vehicleId") Long vehicleId) {
+    public ResponseEntity<Vehicle> getVehicleByDriverId(@PathVariable("id") Long id,
+            @PathVariable("vehicleId") Long vehicleId) {
         log.info("Fetching Vehicle with id {}", vehicleId);
         Vehicle vehicle = vehicleService.getVehicle(vehicleId);
         if (vehicle == null) {
@@ -148,12 +150,13 @@ public class CarrierRest {
     }
 
     @PostMapping(value = "/{id}/vehicles")
-    public ResponseEntity<Vehicle> createVehicle(@PathVariable("id") Long id, @Valid @RequestBody Vehicle vehicle, BindingResult result){
+    public ResponseEntity<Vehicle> createVehicle(@PathVariable("id") Long id, @Valid @RequestBody Vehicle vehicle,
+            BindingResult result) {
         log.info("Creating Vehicle : {}", vehicle);
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
-        Carrier carrier = carrierService.getCarrier(id);
+        User carrier = carrierService.getCarrier(id);
         if (carrier == null) {
             log.error("Unable to create. Carrier with id {} not found.", id);
             return ResponseEntity.notFound().build();
@@ -164,14 +167,15 @@ public class CarrierRest {
     }
 
     @PutMapping(value = "/{id}/vehicles/{vehicleId}")
-    public ResponseEntity<Vehicle> updateVehicle(@PathVariable("id") Long id, @PathVariable("vehicleId") Long vehicleId, @RequestBody Vehicle vehicle) {
+    public ResponseEntity<Vehicle> updateVehicle(@PathVariable("id") Long id, @PathVariable("vehicleId") Long vehicleId,
+            @RequestBody Vehicle vehicle) {
         log.info("Updating Vehicle with id {}", vehicleId);
         Vehicle currentVehicle = vehicleService.getVehicle(vehicleId);
         if (currentVehicle == null) {
             log.error("Unable to update. Vehicle with id {} not found.", vehicleId);
             return ResponseEntity.notFound().build();
         }
-        Carrier carrier = carrierService.getCarrier(id);
+        User carrier = carrierService.getCarrier(id);
         if (carrier == null) {
             log.error("Unable to update. Carrier with id {} not found.", id);
             return ResponseEntity.notFound().build();
@@ -183,7 +187,8 @@ public class CarrierRest {
     }
 
     @DeleteMapping(value = "/{id}/vehicles/{vehicleId}")
-    public ResponseEntity<Vehicle> deleteVehicle(@PathVariable("id") Long id, @PathVariable("vehicleId") Long vehicleId) {
+    public ResponseEntity<Vehicle> deleteVehicle(@PathVariable("id") Long id,
+            @PathVariable("vehicleId") Long vehicleId) {
         log.info("Fetching & Deleting Vehicle with id {}", vehicleId);
         Vehicle vehicle = vehicleService.getVehicle(vehicleId);
         if (vehicle == null) {
@@ -213,7 +218,8 @@ public class CarrierRest {
     }
 
     @GetMapping(value = "/{id}/experiences/{experienceId}")
-    public ResponseEntity<Experience> getExperienceByCarrierId(@PathVariable("id") Long id, @PathVariable("experienceId") Long experienceId) {
+    public ResponseEntity<Experience> getExperienceByCarrierId(@PathVariable("id") Long id,
+            @PathVariable("experienceId") Long experienceId) {
         log.info("Fetching Experience with id {}", experienceId);
         Experience experience = experienceService.getExperience(experienceId);
         if (experience == null) {
@@ -224,12 +230,13 @@ public class CarrierRest {
     }
 
     @PostMapping(value = "/{id}/experiences")
-    public ResponseEntity<Experience> createExperience(@PathVariable("id") Long id, @Valid @RequestBody Experience experience, BindingResult result){
+    public ResponseEntity<Experience> createExperience(@PathVariable("id") Long id,
+            @Valid @RequestBody Experience experience, BindingResult result) {
         log.info("Creating Experience : {}", experience);
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
-        Carrier carrier = carrierService.getCarrier(id);
+        User carrier = carrierService.getCarrier(id);
         if (carrier == null) {
             log.error("Unable to create. Carrier with id {} not found.", id);
             return ResponseEntity.notFound().build();
@@ -240,14 +247,15 @@ public class CarrierRest {
     }
 
     @PutMapping(value = "/{id}/experiences/{experienceId}")
-    public ResponseEntity<Experience> updateExperience(@PathVariable("id") Long id, @PathVariable("experienceId") Long experienceId, @RequestBody Experience experience) {
+    public ResponseEntity<Experience> updateExperience(@PathVariable("id") Long id,
+            @PathVariable("experienceId") Long experienceId, @RequestBody Experience experience) {
         log.info("Updating Experience with id {}", experienceId);
         Experience currentExperience = experienceService.getExperience(experienceId);
         if (currentExperience == null) {
             log.error("Unable to update. Experience with id {} not found.", experienceId);
             return ResponseEntity.notFound().build();
         }
-        Carrier carrier = carrierService.getCarrier(id);
+        User carrier = carrierService.getCarrier(id);
         if (carrier == null) {
             log.error("Unable to update. Carrier with id {} not found.", id);
             return ResponseEntity.notFound().build();
@@ -259,7 +267,8 @@ public class CarrierRest {
     }
 
     @DeleteMapping(value = "/{id}/experiences/{experienceId}")
-    public ResponseEntity<Experience> deleteExperience(@PathVariable("id") Long id, @PathVariable("experienceId") Long experienceId) {
+    public ResponseEntity<Experience> deleteExperience(@PathVariable("id") Long id,
+            @PathVariable("experienceId") Long experienceId) {
         log.info("Fetching & Deleting Experience with id {}", experienceId);
         Experience experience = experienceService.getExperience(experienceId);
         if (experience == null) {
@@ -280,94 +289,104 @@ public class CarrierRest {
     }
 
     @GetMapping(value = "/comments")
-    public ResponseEntity<List<Comment>> listAllComments(){
+    public ResponseEntity<List<Comment>> listAllComments() {
         List<Comment> comments = commentService.findCommentAll();
-        if(comments.isEmpty()){
+        if (comments.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(comments);
     }
 
     @GetMapping(value = "/comments/{id}")
-    public ResponseEntity<Comment> getComment(@PathVariable("id") Long id){
+    public ResponseEntity<Comment> getComment(@PathVariable("id") Long id) {
         log.info("Fetching Comment with id {}", id);
         Comment comment = commentService.getComment(id);
-        if(comment==null){
+        if (comment == null) {
             log.error("Comment with id {} not found.", id);
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(comment);
     }
+
     /*
-    @GetMapping(value = "/{id}/comments")
-    public ResponseEntity<List<Comment>> listAllCommentsByCarrierId(@PathVariable("id") Long id){
-        List<Comment> comments = commentService.findByCarrierId(id);
-        if(comments.isEmpty()){
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(comments);
-    }
-
+     * @GetMapping(value = "/{id}/comments")
+     * public ResponseEntity<List<Comment>>
+     * listAllCommentsByCarrierId(@PathVariable("id") Long id){
+     * List<Comment> comments = commentService.findByCarrierId(id);
+     * if(comments.isEmpty()){
+     * return ResponseEntity.noContent().build();
+     * }
+     * 
+     * return ResponseEntity.ok(comments);
+     * }
+     * 
      */
     @GetMapping(value = "/{id}/comments/{commentId}")
-    public ResponseEntity<Comment> getCommentByCarrierId(@PathVariable("id") Long id, @PathVariable("commentId") Long commentId){
+    public ResponseEntity<Comment> getCommentByCarrierId(@PathVariable("id") Long id,
+            @PathVariable("commentId") Long commentId) {
         log.info("Fetching Comment with id {}", commentId);
         Comment comment = commentService.getComment(commentId);
-        if(comment ==null) {
+        if (comment == null) {
             log.error("Comment with id {} not found.", commentId);
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(comment);
     }
+
     @PostMapping(value = "/{carrierId}/{clientId}/comments")
-    public ResponseEntity<Comment> createComment(@PathVariable("carrierId") Long carrierId,@PathVariable("clientId") Long clientId, String commentText, @Valid @RequestBody Comment comment, BindingResult result){
+    public ResponseEntity<Comment> createComment(@PathVariable("carrierId") Long carrierId,
+            @PathVariable("clientId") Long clientId, String commentText, @Valid @RequestBody Comment comment,
+            BindingResult result) {
         log.info("Creating Comment : {}", comment);
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
         /*
-        Carrier carrier = carrierService.getCarrier(id);
-        Client client = clientService.getClient(id);
-
-        if (carrier == null){
-            log.error("Unable to create. Carrier with id {} not found.", id);
-            return ResponseEntity.notFound().build();
-        }
-        if (client == null){
-            log.error("Unable to create. Carrier with id {} not found.", id);
-            return ResponseEntity.notFound().build();
-        }
-        comment.setCarrier(carrier).setClient(client);
-        */
+         * Carrier carrier = carrierService.getCarrier(id);
+         * Client client = clientService.getClient(id);
+         * 
+         * if (carrier == null){
+         * log.error("Unable to create. Carrier with id {} not found.", id);
+         * return ResponseEntity.notFound().build();
+         * }
+         * if (client == null){
+         * log.error("Unable to create. Carrier with id {} not found.", id);
+         * return ResponseEntity.notFound().build();
+         * }
+         * comment.setCarrier(carrier).setClient(client);
+         */
         Comment commentDB = commentService.createComment(comment);
         return ResponseEntity.ok(commentDB);
     }
+
     @PutMapping(value = "/{id}/comments/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable("id") Long id, @PathVariable("commentId") Long commentId, @RequestBody Comment comment){
+    public ResponseEntity<Comment> updateComment(@PathVariable("id") Long id, @PathVariable("commentId") Long commentId,
+            @RequestBody Comment comment) {
         log.info("Updating Comment with id {}", commentId);
         Comment currentComment = commentService.getComment(commentId);
-        if(currentComment==null){
+        if (currentComment == null) {
             log.error("Unable to update. Comment with id {} not found.", commentId);
             return ResponseEntity.notFound().build();
         }
         /*
-        Carrier carrier = carrierService.getCarrier(id);
-        if(carrier == null){
-            log.error("Unable to update. Carrier with id {} not found.",id);
-            return ResponseEntity.notFound().build();
-        }
-        comment.setComment(carrier);
+         * Carrier carrier = carrierService.getCarrier(id);
+         * if(carrier == null){
+         * log.error("Unable to update. Carrier with id {} not found.",id);
+         * return ResponseEntity.notFound().build();
+         * }
+         * comment.setComment(carrier);
          */
         comment.setId(commentId);
         currentComment = commentService.updateComment(comment);
         return ResponseEntity.ok(currentComment);
     }
+
     @DeleteMapping(value = "/{id}/comments/{commentId}")
-    public ResponseEntity<Comment> deleteComment(@PathVariable("id") Long id, @PathVariable("commentId") Long commentId){
+    public ResponseEntity<Comment> deleteComment(@PathVariable("id") Long id,
+            @PathVariable("commentId") Long commentId) {
         log.info("Fetching & Deleting Comment with id {}", commentId);
         Comment comment = commentService.getComment(commentId);
-        if(comment == null){
+        if (comment == null) {
             log.error("Unable to delete. Comment with id {} not found.", commentId);
             return ResponseEntity.notFound().build();
         }

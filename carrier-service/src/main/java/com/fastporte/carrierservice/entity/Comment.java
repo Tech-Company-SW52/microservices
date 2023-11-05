@@ -16,25 +16,27 @@ public class Comment implements Serializable {
     private Long id;
 
     @NotEmpty(message = "El comentario no puede ser vacio")
-    @Column(name="comment", nullable = false)
+    @Column(name = "comment", nullable = false)
     private String comment;
 
     @NotEmpty(message = "La puntuacion no puede ser vacia")
     @Column(name = "star", nullable = false)
     private int star;
 
-/*
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id_client", referencedColumnName = "id")
-    @JsonIgnore
-    private Client client;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id_carrier", referencedColumnName = "id")
-    @JsonIgnore
-    private Carrier carrier;
-*/
-
-
+    /*
+     * @ManyToOne(fetch = FetchType.LAZY)
+     * 
+     * @JoinColumn(name = "user_id_client", referencedColumnName = "id")
+     * 
+     * @JsonIgnore
+     * private Client client;
+     * 
+     * @ManyToOne(fetch = FetchType.LAZY)
+     * 
+     * @JoinColumn(name = "user_id_carrier", referencedColumnName = "id")
+     * 
+     * @JsonIgnore
+     * private Carrier carrier;
+     */
 
 }

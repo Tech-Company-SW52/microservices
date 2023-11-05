@@ -1,14 +1,19 @@
 package com.client.clientservice.service;
 
-import com.client.clientservice.entity.Client;
-
 import java.util.List;
 
+import com.client.clientservice.entity.User;
+
 public interface IClientService {
-    public Client findByEmailAndPassword(String email, String password);
-    public List<Client> findClientAll();
-    public Client createClient(Client client);
-    public Client updateClient(Client client);
-    public Client deleteClient(Client client);
-    public Client getClient(Long id);
+    public User findByEmailAndPassword(String email, String password);
+
+    public List<User> findClientAll();
+
+    public User createClient(User client);
+
+    public User updateClient(User client);
+
+    public User deleteClient(User client);
+
+    public User getClient(Long id);
 }

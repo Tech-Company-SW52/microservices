@@ -18,7 +18,7 @@ public class Experience implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "carrier_id", nullable = false)
     @JsonIgnore
-    private Carrier carrier;
+    private User carrier;
 
     @Column(name = "job", nullable = false)
     private String job;

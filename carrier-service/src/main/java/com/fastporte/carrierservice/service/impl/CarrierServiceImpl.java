@@ -1,53 +1,54 @@
 package com.fastporte.carrierservice.service.impl;
 
-import com.fastporte.carrierservice.entity.Carrier;
+import com.fastporte.carrierservice.entity.User;
+import com.fastporte.carrierservice.entity.Type;
 import com.fastporte.carrierservice.repository.ICarrierRepository;
 import com.fastporte.carrierservice.service.ICarrierService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@Slf4j
 public class CarrierServiceImpl implements ICarrierService {
 
     @Autowired
     ICarrierRepository carrierRepository;
 
     @Override
-    public Carrier createCarrier(Carrier carrier) {
-        Carrier carrierDB = carrierRepository.findByEmailAndPassword(
-                carrier.getEmail(),
-                carrier.getPassword());
-
+    public User createCarrier(User carrier) {
+        User carrierDB = carrierRepository.findByEmailAndPassword(
+                carrier.getEmail(), carrier.getPassword());
         if (carrierDB != null) {
             return carrierDB;
         }
-
+        carrier.setType(Type.CARRIER);
         carrierDB = carrierRepository.save(carrier);
         return carrierDB;
     }
 
     @Override
-    public Carrier updateCarrier(Carrier carrier) {
-        Carrier carrierDB = getCarrier(carrier.getId());
+    public User updateCarrier(User carrier) {
+        User carrierDB = getCarrier(carrier.getId());
         if (carrierDB == null) {
             return null;
         }
         carrierDB.setFirstName(carrier.getFirstName());
         carrierDB.setLastName(carrier.getLastName());
+        carrierDB.setUsername(carrier.getUsername());
         carrierDB.setEmail(carrier.getEmail());
         carrierDB.setPassword(carrier.getPassword());
-        carrierDB.setPhotoUrl(carrier.getPhotoUrl());
-        carrierDB.setDescription(carrier.getDescription());
         carrierDB.setBirthdate(carrier.getBirthdate());
+        carrierDB.setDescription(carrier.getDescription());
+        carrierDB.setPhotoUrl(carrier.getPhotoUrl());
+        carrierDB.setPhone(carrier.getPhone());
+        // carrierDB.setDistrictId(carrier.getDistrictId());
+        carrierDB.setStreet(carrier.getStreet());
         return carrierRepository.save(carrierDB);
     }
 
     @Override
-    public Carrier deleteCarrier(Carrier carrier) {
-        Carrier carrierDB = getCarrier(carrier.getId());
+    public User deleteCarrier(User carrier) {
+        User carrierDB = getCarrier(carrier.getId());
         if (carrierDB == null) {
             return null;
         }
@@ -56,17 +57,19 @@ public class CarrierServiceImpl implements ICarrierService {
     }
 
     @Override
-    public List<Carrier> findCarrierAll() {
-        return carrierRepository.findAll();
+    public List<User> findCarrierAll() {
+        List<User> carriersDB = carrierRepository.findAll();
+        carriersDB.removeIf(user -> user.getType() != Type.CARRIER);
+        return carriersDB;
     }
 
     @Override
-    public Carrier getCarrier(Long id) {
+    public User getCarrier(Long id) {
         return carrierRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Carrier findByEmailAndPassword(String email, String password) {
+    public User findByEmailAndPassword(String email, String password) {
         return carrierRepository.findByEmailAndPassword(email, password);
     }
 }

@@ -1,12 +1,10 @@
 package com.personaldata.personaldataservice.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.personaldata.personaldataservice.model.Carrier;
-import com.personaldata.personaldataservice.model.Client;
+import com.personaldata.personaldataservice.model.User;
 import com.personaldata.personaldataservice.service.IPersonalDataService;
 
 @RestController
@@ -16,10 +14,10 @@ public class PersonalDataController {
     IPersonalDataService personalDataService;
 
     @PutMapping(value = "/client/{id}")
-    public ResponseEntity<Client> updateClient(
+    public ResponseEntity<User> updateClient(
             @PathVariable("id") long id,
-            @RequestBody Client client) {
-        Client clientUpdated = personalDataService.updateClientPersonalData(id, client);
+            @RequestBody User client) {
+        User clientUpdated = personalDataService.updateClientPersonalData(id, client);
         if (clientUpdated == null) {
             return ResponseEntity.notFound().build();
         }
@@ -27,10 +25,11 @@ public class PersonalDataController {
     }
 
     @PutMapping(value = "/carrier/{id}")
-    public ResponseEntity<Carrier> updateCarrier(
+    public ResponseEntity<User> updateCarrier(
             @PathVariable("id") long id,
-            @RequestBody Carrier carrier) {
-        Carrier carrierUpdated = personalDataService.updateCarrierPersonalData(id, carrier);
+            @RequestBody User carrier) {
+        User carrierUpdated = personalDataService.updateCarrierPersonalData(id,
+                carrier);
         if (carrierUpdated == null) {
             return ResponseEntity.notFound().build();
         }

@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.personaldata.personaldataservice.model.Carrier;
+import com.personaldata.personaldataservice.model.User;
 
 @FeignClient(name = "carrier-service")
 public interface CarrierClient {
 
     @GetMapping(value = "/carrier/{id}")
-    ResponseEntity<Carrier> getCarrier(@PathVariable("id") long id);
+    ResponseEntity<User> getCarrier(@PathVariable("id") long id);
 
     @PutMapping(value = "/carrier/{id}")
-    ResponseEntity<Carrier> updateCarrier(@PathVariable("id") long id,
-            @RequestBody Carrier carrier);
+    ResponseEntity<User> updateCarrier(@PathVariable("id") long id,
+            @RequestBody User carrier);
 }

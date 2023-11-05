@@ -5,8 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.personaldata.personaldataservice.client.CarrierClient;
 import com.personaldata.personaldataservice.client.ClientClient;
-import com.personaldata.personaldataservice.model.Carrier;
-import com.personaldata.personaldataservice.model.Client;
+import com.personaldata.personaldataservice.model.User;
 import com.personaldata.personaldataservice.service.IPersonalDataService;
 
 @Service
@@ -17,8 +16,8 @@ public class PersonalDataServiceImpl implements IPersonalDataService {
     CarrierClient carrierClient;
 
     @Override
-    public Client updateClientPersonalData(Long id, Client client) {
-        Client clientDB = clientClient.getClient(id).getBody();
+    public User updateClientPersonalData(Long id, User client) {
+        User clientDB = clientClient.getClient(id).getBody();
         if (clientDB == null) {
             return null;
         }
@@ -26,8 +25,8 @@ public class PersonalDataServiceImpl implements IPersonalDataService {
     }
 
     @Override
-    public Carrier updateCarrierPersonalData(Long id, Carrier carrier) {
-        Carrier carrierDB = carrierClient.getCarrier(id).getBody();
+    public User updateCarrierPersonalData(Long id, User carrier) {
+        User carrierDB = carrierClient.getCarrier(id).getBody();
         if (carrierDB == null) {
             return null;
         }

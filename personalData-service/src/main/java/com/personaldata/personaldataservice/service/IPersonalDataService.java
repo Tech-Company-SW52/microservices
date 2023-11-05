@@ -1,10 +1,9 @@
 package com.personaldata.personaldataservice.service;
 
-import com.personaldata.personaldataservice.model.Carrier;
-import com.personaldata.personaldataservice.model.Client;
+import com.personaldata.personaldataservice.model.User;
 
 public interface IPersonalDataService {
-    Client updateClientPersonalData(Long id, Client client);
+    User updateClientPersonalData(Long id, User client);
 
-    Carrier updateCarrierPersonalData(Long id, Carrier carrier);
+    User updateCarrierPersonalData(Long id, User carrier);
 }
