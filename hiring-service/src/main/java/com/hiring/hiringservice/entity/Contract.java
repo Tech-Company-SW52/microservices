@@ -1,10 +1,9 @@
 package com.hiring.hiringservice.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.hiring.hiringservice.model.Carrier;
-import com.hiring.hiringservice.model.Client;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,8 +13,9 @@ import java.sql.Time;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="contracts")
 @Data
+@Builder
+@Table(name = "contracts")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Contract implements Serializable {
@@ -24,44 +24,53 @@ public class Contract implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="amount", nullable = false)
+    @Column(name = "amount", nullable = false)
     private String amount;
 
-    @Column(name="description", nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name="quantity", nullable = false)
+    @Column(name = "street_from", nullable = false)
+    private String streetFrom;
+
+    @Column(name = "street_to", nullable = false)
+    private String streetTo;
+
+    @Column(name = "quantity", nullable = false)
     private String quantity;
 
-    @Column(name="subject", nullable = false)
+    @Column(name = "subject", nullable = false)
     private String subject;
 
-    @Column(name="date", nullable = false)
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @Column(name="time_arrival", nullable = false)
+    @Column(name = "time_arrival", nullable = false)
     private Time timeArrival;
 
-    @Column(name="time_departure", nullable = false)
+    @Column(name = "time_departure", nullable = false)
     private Time timeDeparture;
 
-    @Column(name="visible", nullable = false)
+    @Column(name = "visible", nullable = false)
     private boolean visible;
 
-    @Column(name="client_id", nullable = false)
-    private Long clientId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    private User client;
 
-    @Column(name="carrier_id", nullable = false)
-    private Long carrierId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "carrier_id")
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    private User carrier;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private StatusContract status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notification_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private Notification notifications;
-
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    private Notification notification;
 }

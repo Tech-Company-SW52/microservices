@@ -1,25 +1,19 @@
 package com.hiring.hiringservice.service.impl;
 
-
 import com.hiring.hiringservice.client.CarrierClient;
 import com.hiring.hiringservice.client.ClientClient;
 import com.hiring.hiringservice.entity.Contract;
-import com.hiring.hiringservice.model.Carrier;
-import com.hiring.hiringservice.model.Client;
+import com.hiring.hiringservice.entity.User;
 import com.hiring.hiringservice.repository.IContractRepository;
 import com.hiring.hiringservice.repository.INotificationRepository;
 import com.hiring.hiringservice.repository.IStatusContractRepository;
 import com.hiring.hiringservice.service.IContractService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
-@Slf4j
 @Service
 public class ContractServiceImpl implements IContractService {
 
@@ -41,64 +35,38 @@ public class ContractServiceImpl implements IContractService {
 
     @Override
     public List<Contract> findOfferContract(Long carrierId) {
-        //Carrier carrierDB = carrierClient.getCarrier(carrierId).getBody();
-        //if (carrierDB == null) return null;
         List<Contract> contractsDB = contractRepository.findAll();
-        //contractsDB.removeIf(contract -> !contract.getStatus().getStatus().equals("OFFER"));
-        contractsDB.removeIf(contract -> !contract.getCarrierId().equals(carrierId));
-        if (!contractsDB.isEmpty())
+        contractsDB.removeIf(contract -> !contract.getStatus().getStatus().equals("OFFER"));
+        User carrierDB = carrierClient.getCarrier(carrierId).getBody();
+        if (carrierDB == null)
+            return null;
+        contractsDB.removeIf(contract -> !contract.getCarrier().equals(carrierDB));
+        if (contractsDB.isEmpty())
             return null;
         return contractsDB;
     }
-
-
-    public List<Contract> findContractsByCarrierId(Long carrierId) {
-        List<Contract> allContracts = contractRepository.findAll();
-        List<Contract> contractsByCarrierId = new ArrayList<>();
-
-        for (Contract contract : allContracts) {
-            if (contract.getCarrierId() != null && contract.getCarrierId().equals(carrierId)) {
-                contractsByCarrierId.add(contract);
-            }
-        }
-
-        return contractsByCarrierId;
-    }
-
 
     public List<Contract> findContract(Long userId, String user, String contractType) {
         List<Contract> contractsDB = contractRepository.findAll();
         contractsDB.removeIf(contract -> !contract.getStatus().getStatus().equals(contractType));
 
-        if (Objects.equals(user, "client"))
-        {
-            //Client clientDB = clientClient.getClient(userId).getBody();
-            if (contractsDB.isEmpty()) {
-                return null;
-            }else{
-                contractsDB.removeIf(contract -> !contract.getClientId().equals(userId));
-            }
+        if (contractsDB.isEmpty())
+            return null;
 
-
-        }
-        else{
-            if (Objects.equals(user, "carrier")) {
-                //Carrier carrierDB = carrierClient.getCarrier(userId).getBody();
-                if (contractsDB.isEmpty())
-                {
-                    return null;
-                }else
-                {
-                    contractsDB.removeIf(contract -> !contract.getCarrierId().equals(userId));
-                }
-            }
+        if (Objects.equals(user, "client")) {
+            User clientDB = clientClient.getClient(userId).getBody();
+            contractsDB.removeIf(contract -> !contract.getClient().equals(clientDB));
+        } else if (Objects.equals(user, "carrier")) {
+            User carrierDB = carrierClient.getCarrier(userId).getBody();
+            contractsDB.removeIf(contract -> !contract.getCarrier().equals(carrierDB));
+        } else {
+            return null;
         }
 
         if (contractsDB.isEmpty())
             return null;
 
         return contractsDB;
-
     }
 
     @Override
@@ -112,32 +80,75 @@ public class ContractServiceImpl implements IContractService {
     }
 
     @Override
+    public Contract updateStatusContract(Long id, String statusContract) {
+        Contract contractDB = contractRepository.findById(id).orElse(null);
+        if (contractDB == null)
+            return null;
+        contractDB.setStatus(statusContractRepository.findByStatus(statusContract));
+        contractRepository.save(contractDB);
+        return contractDB;
+    }
+
+    @Override
+    public List<Contract> getUnreadNotificationsByUser(Long userId, String user) {
+        List<Contract> contractsDB = contractRepository.findAll();
+        contractsDB.removeIf(
+                contract -> !contract.getNotification().equals(notificationRepository.findByReadStatus(false)));
+        if (user.equals("client")) {
+            User clientDB = clientClient.getClient(userId).getBody();
+            contractsDB.removeIf(contract -> !contract.getClient().equals(clientDB));
+        } else if (user.equals("carrier")) {
+            User carrierDB = carrierClient.getCarrier(userId).getBody();
+            contractsDB.removeIf(contract -> !contract.getCarrier().equals(carrierDB));
+        } else {
+            return null;
+        }
+        if (contractsDB.isEmpty())
+            return null;
+        return contractsDB;
+    }
+
+    @Override
+    public Contract changeNotificationStatus(Long id) {
+        Contract contractDB = contractRepository.findById(id).orElse(null);
+        if (contractDB == null)
+            return null;
+        contractDB.getNotification().setReadStatus(!contractDB.getNotification().isReadStatus());
+        contractRepository.save(contractDB);
+        return contractDB;
+    }
+
+    @Override
+    public Contract changeVisibility(Long id) {
+        Contract contractDB = contractRepository.findById(id).orElse(null);
+        if (contractDB == null)
+            return null;
+        contractDB.setVisible(!contractDB.isVisible());
+        contractRepository.save(contractDB);
+        return contractDB;
+    }
+
+    @Override
     public Contract createContract(Long carrierId, Long clientId, Contract contract) {
-        Carrier carrierDB = carrierClient.getCarrier(carrierId).getBody();
-        Client clientDB = clientClient.getClient(clientId).getBody();
-        if (carrierDB == null || clientDB == null) return null;
-        contract.setCarrierId(carrierId);
-        contract.setClientId(clientId);
+        User carrierDB = carrierClient.getCarrier(carrierId).getBody();
+        if (carrierDB == null)
+            return null;
+        User clientDB = clientClient.getClient(clientId).getBody();
+        if (clientDB == null)
+            return null;
+        contract.setCarrier(carrierDB);
+        contract.setClient(clientDB);
         contract.setVisible(true);
         contract.setStatus(statusContractRepository.findByStatus("OFFER"));
-        contract.setNotifications(notificationRepository.findByReadStatus(false));
+        contract.setNotification(notificationRepository.findByReadStatus(false));
         return contractRepository.save(contract);
     }
 
     @Override
-    public List<Contract> findByStatusStatusAndCarrierId(String status, Long id){
-        return contractRepository.findByStatusStatusAndCarrierId(status, id);
+    public Contract getById(Long id) {
+        return contractRepository.findById(id).orElse(null);
     }
 
-    @Override
-    public List<Contract> findByCarrierId(Long id){
-        return contractRepository.findByCarrierId(id);
-    }
-
-    @Override
-    public Optional<Contract> getById(Long id)  {
-        return contractRepository.findById(id);
-    }
     @Override
     public Contract save(Contract contract) {
         return contractRepository.save(contract);

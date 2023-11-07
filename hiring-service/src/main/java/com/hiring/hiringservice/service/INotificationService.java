@@ -12,5 +12,6 @@ public interface INotificationService {
     void delete(Long id);
 
     Optional<Notification> NotificationGetById(Long id);
+
     List<Notification> NotificationGetAll();
 }

@@ -1,6 +1,7 @@
 package com.hiring.hiringservice.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,8 +9,9 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="notifications")
 @Data
+@Builder
+@Table(name = "notifications")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notification implements Serializable {
@@ -17,6 +19,6 @@ public class Notification implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="read_status", nullable = false)
+    @Column(name = "read_status", nullable = false)
     private boolean readStatus;
 }

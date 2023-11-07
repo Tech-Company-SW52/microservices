@@ -3,18 +3,27 @@ package com.hiring.hiringservice.service;
 import com.hiring.hiringservice.entity.Contract;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IContractService {
     List<Contract> findContractAll();
-    List<Contract> findOfferContract(Long userId);
-    List<Contract> findPendingContract(Long userId, String user);
-    List<Contract> findHistoryContract(Long userId, String user);
-    Contract createContract(Long carrierId, Long ClientId, Contract contract);
-    List<Contract> findContractsByCarrierId(Long carrierId);
-    List<Contract> findByStatusStatusAndCarrierId(String status, Long id);
-    List<Contract> findByCarrierId(Long id);
-    Optional<Contract> getById(Long id);
-    Contract save(Contract contract);
 
+    List<Contract> findOfferContract(Long id);
+
+    List<Contract> findPendingContract(Long userId, String user);
+
+    List<Contract> findHistoryContract(Long userId, String user);
+
+    Contract updateStatusContract(Long id, String statusContract);
+
+    List<Contract> getUnreadNotificationsByUser(Long userId, String user);
+
+    Contract changeNotificationStatus(Long id);
+
+    Contract changeVisibility(Long id);
+
+    Contract createContract(Long carrierId, Long ClientId, Contract contract);
+
+    Contract getById(Long id);
+
+    Contract save(Contract contract);
 }

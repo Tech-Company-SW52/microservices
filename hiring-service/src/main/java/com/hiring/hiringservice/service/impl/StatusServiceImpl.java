@@ -5,17 +5,15 @@ import com.hiring.hiringservice.entity.StatusContract;
 import com.hiring.hiringservice.repository.IContractRepository;
 import com.hiring.hiringservice.repository.IStatusContractRepository;
 import com.hiring.hiringservice.service.IStatusService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Service
 public class StatusServiceImpl implements IStatusService {
-   @Autowired
+    @Autowired
     IContractRepository contractRepository;
     @Autowired
     IStatusContractRepository statusContractRepository;
