@@ -1,19 +1,16 @@
 package com.fastporte.search_service.controller;
+
 import com.fastporte.search_service.client.CarrierClient;
 
-import com.fastporte.search_service.model.Carrier;
-import com.fastporte.search_service.entity.Vehicle;
-import com.fastporte.search_service.service.SearchService;
-import lombok.extern.slf4j.Slf4j;
+import com.fastporte.search_service.model.User;
+import com.fastporte.search_service.model.Vehicle;
+import com.fastporte.search_service.service.ISearchService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,36 +19,35 @@ import java.util.List;
 public class SearchController {
 
     @Autowired
-    SearchService searchService;
+    ISearchService searchService;
 
     @Autowired
     CarrierClient carrierClient;
 
-    //obtener data de otro microservicio
     public List<Vehicle> getVehiclesAndCarriers() {
 
-        ResponseEntity<List<Carrier>> responseCarriers = carrierClient.listAllCarriers();
-        List<Carrier> carriers = responseCarriers.getBody();
+        ResponseEntity<List<User>> responseCarriers = carrierClient.listAllCarriers();
+        List<User> carriers = responseCarriers.getBody();
 
         ResponseEntity<List<Vehicle>> responseVehicles = carrierClient.listAllVehicles();
         List<Vehicle> vehicles = responseVehicles.getBody();
 
-        if(vehicles !=null) {
-            // Agrega los carriers a los vehicles
+        if (vehicles != null) {
             for (Vehicle vehicle : vehicles) {
-                Carrier carrier = carriers.stream()
+                User carrier = carriers.stream()
                         .filter(c -> c.getId().equals(vehicle.getCarrier().getId()))
                         .findFirst()
                         .orElse(null);
 
                 vehicle.setCarrier(carrier);
             }
-        }else {
+        } else {
             vehicles = new ArrayList<>();
         }
 
         return vehicles;
     }
+
     @GetMapping("/type")
     public List<Vehicle> searchTransportByType(@RequestParam String query) {
         List<Vehicle> vehicleList = new ArrayList<>();
@@ -70,11 +66,11 @@ public class SearchController {
         return filteredVehicleList;
     }
 
-    @GetMapping("/region")
+    @GetMapping("/street")
     public List<Vehicle> searchTransportByCarrierRegion(@RequestParam String query) {
         List<Vehicle> allVehicle = new ArrayList<>();
         allVehicle = getVehiclesAndCarriers();
-        List<Vehicle> filteredVehicleList = searchService.filterTransportByCarrierRegion(allVehicle, query);
+        List<Vehicle> filteredVehicleList = searchService.filterTransportByCarrierStreet(allVehicle, query);
 
         return filteredVehicleList;
     }

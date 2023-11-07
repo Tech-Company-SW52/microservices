@@ -1,41 +1,28 @@
 package com.fastporte.search_service.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-
 @Data
 @Builder
-@Getter
-@Setter
-
-public class Carrier {
-
+@NoArgsConstructor
+@AllArgsConstructor
+public class User {
     private Long id;
-
     private String firstName;
-
     private String lastName;
-
-    private String username;
-
-    private String photoUrl;
-
     private String email;
-
     private String password;
-
-    private String phone;
-
-    private String region;
-
+    private String username;
     private LocalDate birthdate;
-
     private String description;
-
-
+    private String photoUrl;
+    private String phone;
+    private Type type;
+    private String street;
+    private int stars;
 }
