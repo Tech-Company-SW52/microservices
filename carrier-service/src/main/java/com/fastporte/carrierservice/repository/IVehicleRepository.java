@@ -9,5 +9,4 @@ import java.util.List;
 @Repository
 public interface IVehicleRepository extends JpaRepository<Vehicle, Long> {
     List<Vehicle> findByCarrierId(Long driverId);
-
 }

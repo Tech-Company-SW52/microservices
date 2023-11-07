@@ -16,5 +16,4 @@ public interface ICarrierService {
     public User deleteCarrier(User carrier);
 
     public User getCarrier(Long id);
-
 }

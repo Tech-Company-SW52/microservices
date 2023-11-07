@@ -1,42 +1,38 @@
-package com.fastporte.carrierservice.entity;
+// package com.fastporte.carrierservice.entity;
 
-import lombok.Data;
+// import lombok.Data;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import java.io.Serializable;
+// import jakarta.persistence.*;
+// import jakarta.validation.constraints.NotEmpty;
+// import java.io.Serializable;
 
-@Data
-@Entity
-@Table(name = "comments")
-public class Comment implements Serializable {
+// import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+// @Data
+// @Entity
+// @Table(name = "comments")
+// public class Comment implements Serializable {
 
-    @NotEmpty(message = "El comentario no puede ser vacio")
-    @Column(name = "comment", nullable = false)
-    private String comment;
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
 
-    @NotEmpty(message = "La puntuacion no puede ser vacia")
-    @Column(name = "star", nullable = false)
-    private int star;
+//     @NotEmpty(message = "El comentario no puede ser vacio")
+//     @Column(name = "comment", nullable = false)
+//     private String comment;
 
-    /*
-     * @ManyToOne(fetch = FetchType.LAZY)
-     * 
-     * @JoinColumn(name = "user_id_client", referencedColumnName = "id")
-     * 
-     * @JsonIgnore
-     * private Client client;
-     * 
-     * @ManyToOne(fetch = FetchType.LAZY)
-     * 
-     * @JoinColumn(name = "user_id_carrier", referencedColumnName = "id")
-     * 
-     * @JsonIgnore
-     * private Carrier carrier;
-     */
+//     @NotEmpty(message = "La puntuacion no puede ser vacia")
+//     @Column(name = "stars", nullable = false)
+//     private int stars;
 
-}
+//     @ManyToOne(fetch = FetchType.LAZY)
+//     @JoinColumn(name = "user_id_client", referencedColumnName = "id")
+//     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+//     private User client;
+
+//     @ManyToOne(fetch = FetchType.LAZY)
+//     @JoinColumn(name = "user_id_carrier", referencedColumnName = "id")
+//     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+//     private User carrier;
+
+// }

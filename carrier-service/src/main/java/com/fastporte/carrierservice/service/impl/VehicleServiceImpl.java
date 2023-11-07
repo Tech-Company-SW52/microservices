@@ -31,12 +31,14 @@ public class VehicleServiceImpl implements IVehicleService {
 
     @Override
     public Vehicle updateVehicle(Vehicle vehicle) {
-
         Vehicle vehicleDB = getVehicle(vehicle.getId());
         if (vehicleDB == null) {
             return null;
         }
-        return vehicleRepository.save(vehicle);
+        vehicleDB.setPhoto(vehicle.getPhoto());
+        vehicleDB.setType(vehicle.getType());
+        vehicleDB.setQuantity(vehicle.getQuantity());
+        return vehicleRepository.save(vehicleDB);
     }
 
     @Override

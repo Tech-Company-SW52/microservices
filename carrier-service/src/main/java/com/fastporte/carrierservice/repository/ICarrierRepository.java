@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ICarrierRepository extends JpaRepository<User, Long> {
     User findByEmailAndPassword(String email, String password);
-
 }

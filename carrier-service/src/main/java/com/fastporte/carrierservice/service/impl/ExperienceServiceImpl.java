@@ -35,7 +35,9 @@ public class ExperienceServiceImpl implements IExperienceService {
         if (experienceDB == null) {
             return null;
         }
-        return experienceRepository.save(experience);
+        experienceDB.setJob(experience.getJob());
+        experienceDB.setYears(experience.getYears());
+        return experienceRepository.save(experienceDB);
     }
 
     @Override

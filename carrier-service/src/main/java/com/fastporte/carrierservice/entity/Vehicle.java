@@ -1,8 +1,11 @@
 package com.fastporte.carrierservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +13,10 @@ import java.io.Serializable;
 
 @Data
 @Entity
+@Builder
 @Table(name = "vehicles")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Vehicle implements Serializable {
 
     @Id
