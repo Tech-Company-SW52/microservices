@@ -15,12 +15,12 @@ public class HiringServiceApplication {
 	}
 
 	@Bean
-	public StatusContractInitializer intitialzer1() {
+	public StatusContractInitializer intitializer1() {
 		return new StatusContractInitializer();
 	}
 
 	@Bean
-	public NotificationInitializer intitialzer2() {
+	public NotificationInitializer intitializer2() {
 		return new NotificationInitializer();
 	}
 
