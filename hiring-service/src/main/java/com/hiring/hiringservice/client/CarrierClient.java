@@ -14,5 +14,6 @@ public interface CarrierClient {
     ResponseEntity<User> getCarrier(@PathVariable("id") long id);
 
     @PutMapping(value = "/carrier/{id}")
-    ResponseEntity<User> updateCarrier(@PathVariable("id") long id, @RequestBody User carrier);
+    ResponseEntity<User> updateCarrier(@PathVariable("id") long id,
+            @RequestBody User carrier);
 }

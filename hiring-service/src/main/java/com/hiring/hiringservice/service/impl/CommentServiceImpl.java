@@ -1,6 +1,5 @@
 package com.hiring.hiringservice.service.impl;
 
-import com.hiring.hiringservice.client.CarrierClient;
 import com.hiring.hiringservice.client.ClientClient;
 import com.hiring.hiringservice.entity.Comment;
 import com.hiring.hiringservice.entity.User;
@@ -23,8 +22,6 @@ public class CommentServiceImpl implements ICommentService {
     IContractRepository contractRepository;
     @Autowired
     ClientClient clientClient;
-    @Autowired
-    CarrierClient carrierClient;
 
     @Override
     public List<Comment> findCommentAll() {
@@ -40,6 +37,14 @@ public class CommentServiceImpl implements ICommentService {
     }
 
     @Override
+    public List<Comment> findByCarrierId(Long carrierId) {
+        List<Comment> commentsDB = commentRepository.findAll();
+        return commentsDB.stream()
+                .filter(comment -> comment.getContract().getCarrier().getId().equals(carrierId))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Comment createComment(Comment comment, Long clientId, Long contractId) {
         User clientDB = clientClient.getClient(clientId).getBody();
         if (clientDB == null)
@@ -47,15 +52,16 @@ public class CommentServiceImpl implements ICommentService {
         Contract contractDB = contractRepository.findById(contractId).orElse(null);
         if (contractDB == null)
             return null;
+
         // Update stars
-        // User carrierDB = contractDB.getCarrier();
-        // int currentStars = carrierDB.getStars();
-        // if (currentStars == 0) {
-        // carrierDB.setStars(comment.getStars());
-        // } else {
-        // carrierDB.setStars((currentStars + comment.getStars()) / 2);
-        // }
-        // carrierClient.updateCarrier(carrierDB.getId(), carrierDB);
+        User carrierDB = contractDB.getCarrier();
+        int currentStars = carrierDB.getStars();
+        if (currentStars == 0) {
+            carrierDB.setStars(comment.getStars());
+        } else {
+            carrierDB.setStars((currentStars + comment.getStars()) / 2);
+        }
+
         comment.setClient(clientDB);
         comment.setContract(contractDB);
         return commentRepository.save(comment);
@@ -67,7 +73,19 @@ public class CommentServiceImpl implements ICommentService {
         if (commentDB == null) {
             return null;
         }
-        return commentRepository.save(comment);
+        commentDB.setStars(comment.getStars());
+        commentDB.setComment(comment.getComment());
+
+        // Update stars
+        User carrierDB = commentDB.getContract().getCarrier();
+        List<Comment> commentsCarrierDB = findByCarrierId(carrierDB.getId());
+
+        commentDB.getContract().getCarrier().setStars(
+                commentsCarrierDB.stream()
+                        .mapToInt(Comment::getStars)
+                        .sum() / commentsCarrierDB.size());
+
+        return commentRepository.save(commentDB);
     }
 
     @Override

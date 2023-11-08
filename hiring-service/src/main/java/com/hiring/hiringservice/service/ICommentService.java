@@ -10,6 +10,8 @@ public interface ICommentService {
 
     public List<Comment> findByContractId(Long contractId);
 
+    public List<Comment> findByCarrierId(Long carrierId);
+
     public Comment createComment(Comment comment, Long clientId, Long contractId);
 
     public Comment updateComment(Comment comment);
