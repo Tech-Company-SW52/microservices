@@ -12,6 +12,8 @@ import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Data
 @Entity
 @Builder
@@ -65,9 +67,10 @@ public class User implements Serializable {
     @Column(name = "type")
     private Type type;
 
-    // @NotEmpty(message = "El distrito no puede ser vacío")
-    // @Column(name = "district_id")
-    // private Long districtId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "district_id")
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    private District district;
 
     @NotEmpty(message = "La región no puede ser vacía")
     @Column(name = "street", nullable = false)

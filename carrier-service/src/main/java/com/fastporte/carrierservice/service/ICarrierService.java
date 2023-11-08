@@ -9,9 +9,9 @@ public interface ICarrierService {
 
     public List<User> findCarrierAll();
 
-    public User createCarrier(User carrier);
+    public User createCarrier(User carrier, String districtId);
 
-    public User updateCarrier(User carrier);
+    public User updateCarrier(User carrier, String districtId);
 
     public User deleteCarrier(User carrier);
 

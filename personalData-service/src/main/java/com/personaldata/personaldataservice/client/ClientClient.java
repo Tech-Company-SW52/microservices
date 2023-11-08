@@ -13,7 +13,9 @@ public interface ClientClient {
     @GetMapping(value = "/client/{id}")
     ResponseEntity<User> getClient(@PathVariable("id") long id);
 
-    @PutMapping(value = "/client/{id}")
-    ResponseEntity<User> updateClient(@PathVariable("id") long id,
+    @PutMapping(value = "/client/{id}/districtId/{districtId}")
+    ResponseEntity<User> updateClient(
+            @PathVariable("id") long id,
+            @PathVariable("districtId") String districtId,
             @RequestBody User client);
 }

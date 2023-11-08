@@ -3,6 +3,7 @@ package com.fastporte.carrierservice.service.impl;
 import com.fastporte.carrierservice.entity.User;
 import com.fastporte.carrierservice.entity.Type;
 import com.fastporte.carrierservice.repository.ICarrierRepository;
+import com.fastporte.carrierservice.repository.IDistrictRepository;
 import com.fastporte.carrierservice.service.ICarrierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,21 +14,23 @@ public class CarrierServiceImpl implements ICarrierService {
 
     @Autowired
     ICarrierRepository carrierRepository;
+    @Autowired
+    IDistrictRepository districtRepository;
 
     @Override
-    public User createCarrier(User carrier) {
+    public User createCarrier(User carrier, String districtId) {
         User carrierDB = carrierRepository.findByEmailAndPassword(
                 carrier.getEmail(), carrier.getPassword());
         if (carrierDB != null) {
             return carrierDB;
         }
         carrier.setType(Type.CARRIER);
-        carrierDB = carrierRepository.save(carrier);
-        return carrierDB;
+        carrier.setDistrict(districtRepository.findById(districtId).orElse(null));
+        return carrierRepository.save(carrier);
     }
 
     @Override
-    public User updateCarrier(User carrier) {
+    public User updateCarrier(User carrier, String districtId) {
         User carrierDB = getCarrier(carrier.getId());
         if (carrierDB == null) {
             return null;
@@ -41,7 +44,8 @@ public class CarrierServiceImpl implements ICarrierService {
         carrierDB.setDescription(carrier.getDescription());
         carrierDB.setPhotoUrl(carrier.getPhotoUrl());
         carrierDB.setPhone(carrier.getPhone());
-        // carrierDB.setDistrictId(carrier.getDistrictId());
+        if (districtId != carrierDB.getDistrict().getId())
+            carrierDB.setDistrict(districtRepository.findById(districtId).orElse(null));
         carrierDB.setStreet(carrier.getStreet());
         return carrierRepository.save(carrierDB);
     }

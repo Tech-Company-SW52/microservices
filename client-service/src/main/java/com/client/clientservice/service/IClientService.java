@@ -9,9 +9,9 @@ public interface IClientService {
 
     public List<User> findClientAll();
 
-    public User createClient(User client);
+    public User createClient(User client, String districtId);
 
-    public User updateClient(User client);
+    public User updateClient(User client, String districtId);
 
     public User deleteClient(User client);
 

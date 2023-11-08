@@ -16,20 +16,20 @@ public class PersonalDataServiceImpl implements IPersonalDataService {
     CarrierClient carrierClient;
 
     @Override
-    public User updateClientPersonalData(Long id, User client) {
+    public User updateClientPersonalData(Long id, String districtId, User client) {
         User clientDB = clientClient.getClient(id).getBody();
         if (clientDB == null) {
             return null;
         }
-        return clientClient.updateClient(id, client).getBody();
+        return clientClient.updateClient(id, districtId, client).getBody();
     }
 
     @Override
-    public User updateCarrierPersonalData(Long id, User carrier) {
+    public User updateCarrierPersonalData(Long id, String districtId, User carrier) {
         User carrierDB = carrierClient.getCarrier(id).getBody();
         if (carrierDB == null) {
             return null;
         }
-        return carrierClient.updateCarrier(id, carrier).getBody();
+        return carrierClient.updateCarrier(id, districtId, carrier).getBody();
     }
 }

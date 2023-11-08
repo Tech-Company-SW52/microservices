@@ -67,18 +67,26 @@ public class CarrierRest {
         return ResponseEntity.ok(carrier);
     }
 
-    @PostMapping
-    public ResponseEntity<User> createCarrier(@Valid @RequestBody User carrier, BindingResult result) {
+    @PostMapping(value = "add/district/{districtId}")
+    public ResponseEntity<User> createCarrier(
+            @PathVariable("districtId") String districtId,
+            @Valid @RequestBody User carrier,
+            BindingResult result) {
+
         log.info("Creating Carrier : {}", carrier);
         if (result.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
-        User carrierDB = carrierService.createCarrier(carrier);
+        User carrierDB = carrierService.createCarrier(carrier, districtId);
         return ResponseEntity.ok(carrierDB);
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<User> updateCarrier(@PathVariable("id") long id, @RequestBody User carrier) {
+    @PutMapping(value = "/{id}/district/{districtId}")
+    public ResponseEntity<User> updateCarrier(
+            @PathVariable("id") long id,
+            @PathVariable("districtId") String districtId,
+            @RequestBody User carrier) {
+
         log.info("Updating Carrier with id {}", id);
         User currentCarrier = carrierService.getCarrier(id);
         if (currentCarrier == null) {
@@ -86,7 +94,7 @@ public class CarrierRest {
             return ResponseEntity.notFound().build();
         }
         carrier.setId(id);
-        currentCarrier = carrierService.updateCarrier(carrier);
+        currentCarrier = carrierService.updateCarrier(carrier, districtId);
         return ResponseEntity.ok(currentCarrier);
     }
 

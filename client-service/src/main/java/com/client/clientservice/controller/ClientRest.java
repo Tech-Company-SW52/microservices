@@ -47,7 +47,9 @@ public class ClientRest {
 
     @GetMapping(value = "/searchEmailAndPassword/{email}/{password}")
     public ResponseEntity<User> getClientByEmailAndPassword(
-            @PathVariable("email") String email, @PathVariable("password") String password) {
+            @PathVariable("email") String email,
+            @PathVariable("password") String password) {
+
         log.info("Fetching Client with email {} and password {}", email, password);
         User client = clientService.findByEmailAndPassword(email, password);
         if (client == null) {
@@ -57,18 +59,26 @@ public class ClientRest {
         return ResponseEntity.ok(client);
     }
 
-    @PostMapping
-    public ResponseEntity<User> createClient(@Valid @RequestBody User client, BindingResult result) {
+    @PostMapping(value = "/add/district/{districtId}")
+    public ResponseEntity<User> createClient(
+            @PathVariable("districtId") String districtId,
+            @Valid @RequestBody User client,
+            BindingResult result) {
+
         log.info("Creating Client : {}", client);
         if (result.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
-        User clientDB = clientService.createClient(client);
+        User clientDB = clientService.createClient(client, districtId);
         return ResponseEntity.status(HttpStatus.CREATED).body(clientDB);
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<User> updateClient(@PathVariable("id") long id, @RequestBody User client) {
+    @PutMapping(value = "/{id}/district/{districtId}")
+    public ResponseEntity<User> updateClient(
+            @PathVariable("id") long id,
+            @PathVariable("districtId") String districtId,
+            @RequestBody User client) {
+
         log.info("Updating Client with id {}", id);
         User currentClient = clientService.getClient(id);
         if (currentClient == null) {
@@ -76,7 +86,7 @@ public class ClientRest {
             return ResponseEntity.notFound().build();
         }
         client.setId(id);
-        currentClient = clientService.updateClient(client);
+        currentClient = clientService.updateClient(client, districtId);
         return ResponseEntity.ok(currentClient);
     }
 

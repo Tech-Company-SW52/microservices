@@ -3,6 +3,7 @@ package com.client.clientservice.service.impl;
 import com.client.clientservice.entity.User;
 import com.client.clientservice.entity.Type;
 import com.client.clientservice.repository.IClientRepository;
+import com.client.clientservice.repository.IDistrictRepository;
 import com.client.clientservice.service.IClientService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import java.util.List;
 public class ClientServiceImpl implements IClientService {
     @Autowired
     IClientRepository clientRepository;
+    @Autowired
+    IDistrictRepository districtRepository;
 
     @Override
     public User findByEmailAndPassword(String email, String password) {
@@ -28,19 +31,19 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public User createClient(User client) {
+    public User createClient(User client, String districtId) {
         User clientDB = clientRepository.findByEmailAndPassword(
                 client.getEmail(), client.getPassword());
         if (clientDB != null) {
             return clientDB;
         }
         client.setType(Type.CLIENT);
-        clientDB = clientRepository.save(client);
-        return clientDB;
+        client.setDistrict(districtRepository.findById(districtId).orElse(null));
+        return clientRepository.save(client);
     }
 
     @Override
-    public User updateClient(User client) {
+    public User updateClient(User client, String districtId) {
         User clientDB = getClient(client.getId());
         if (clientDB == null) {
             return null;
@@ -54,7 +57,8 @@ public class ClientServiceImpl implements IClientService {
         clientDB.setDescription(client.getDescription());
         clientDB.setPhotoUrl(client.getPhotoUrl());
         clientDB.setPhone(client.getPhone());
-        // clientDB.setDistrictId(client.getDistrictId());
+        if (districtId != clientDB.getDistrict().getId())
+            clientDB.setDistrict(districtRepository.findById(districtId).orElse(null));
         clientDB.setStreet(client.getStreet());
         return clientRepository.save(clientDB);
     }

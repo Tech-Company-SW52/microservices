@@ -13,23 +13,26 @@ public class PersonalDataController {
     @Autowired
     IPersonalDataService personalDataService;
 
-    @PutMapping(value = "/client/{id}")
+    @PutMapping(value = "/client/{id}/districtId/{districtId}")
     public ResponseEntity<User> updateClient(
             @PathVariable("id") long id,
+            @PathVariable("districtId") String districtId,
             @RequestBody User client) {
-        User clientUpdated = personalDataService.updateClientPersonalData(id, client);
+
+        User clientUpdated = personalDataService.updateClientPersonalData(id, districtId, client);
         if (clientUpdated == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(clientUpdated);
     }
 
-    @PutMapping(value = "/carrier/{id}")
+    @PutMapping(value = "/carrier/{id}/districtId/{districtId}")
     public ResponseEntity<User> updateCarrier(
             @PathVariable("id") long id,
+            @PathVariable("districtId") String districtId,
             @RequestBody User carrier) {
-        User carrierUpdated = personalDataService.updateCarrierPersonalData(id,
-                carrier);
+
+        User carrierUpdated = personalDataService.updateCarrierPersonalData(id, districtId, carrier);
         if (carrierUpdated == null) {
             return ResponseEntity.notFound().build();
         }

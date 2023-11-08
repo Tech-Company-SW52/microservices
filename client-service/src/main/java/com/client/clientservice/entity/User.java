@@ -68,7 +68,7 @@ public class User implements Serializable {
     @Column(name = "type")
     private Type type;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "district_id")
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private District district;
