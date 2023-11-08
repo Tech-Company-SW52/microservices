@@ -76,7 +76,8 @@ public class ContractRest {
     }
 
     @PostMapping(value = "/add/client/{clientId}/carrier/{carrierId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Contract> createContract(@PathVariable("clientId") Long clientId,
+    public ResponseEntity<Contract> createContract(
+            @PathVariable("clientId") Long clientId,
             @PathVariable("carrierId") Long carrierId,
             @Valid @RequestBody Contract contract,
             BindingResult result) {

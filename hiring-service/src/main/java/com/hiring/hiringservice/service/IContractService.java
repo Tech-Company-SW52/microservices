@@ -5,6 +5,7 @@ import com.hiring.hiringservice.entity.Contract;
 import java.util.List;
 
 public interface IContractService {
+
     List<Contract> findContractAll();
 
     List<Contract> findOfferContract(Long id);
