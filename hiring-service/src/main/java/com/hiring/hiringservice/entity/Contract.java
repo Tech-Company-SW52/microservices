@@ -33,8 +33,18 @@ public class Contract implements Serializable {
     @Column(name = "street_from", nullable = false)
     private String streetFrom;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "district_from_id")
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    private District districtFrom;
+
     @Column(name = "street_to", nullable = false)
     private String streetTo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "district_to_id")
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    private District districtTo;
 
     @Column(name = "quantity", nullable = false)
     private String quantity;

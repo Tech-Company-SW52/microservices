@@ -75,10 +75,12 @@ public class ContractRest {
         return ResponseEntity.ok(contracts);
     }
 
-    @PostMapping(value = "/add/client/{clientId}/carrier/{carrierId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/add/client/{clientId}/carrier/{carrierId}/districtFrom/{districtFromId}/districtTo/{districtToId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Contract> createContract(
             @PathVariable("clientId") Long clientId,
             @PathVariable("carrierId") Long carrierId,
+            @PathVariable("districtFromId") String districtFromId,
+            @PathVariable("districtToId") String districtToId,
             @Valid @RequestBody Contract contract,
             BindingResult result) {
 
@@ -86,7 +88,8 @@ public class ContractRest {
         if (result.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
-        Contract contractDB = contractService.createContract(carrierId, clientId, contract);
+        Contract contractDB = contractService.createContract(
+                carrierId, clientId, districtFromId, districtToId, contract);
         return ResponseEntity.status(HttpStatus.CREATED).body(contractDB);
     }
 

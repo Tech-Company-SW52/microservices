@@ -8,5 +8,5 @@ import lombok.Data;
 public class Province {
     private String id;
     private String name;
-    private String departmentId;
+    private Department department;
 }

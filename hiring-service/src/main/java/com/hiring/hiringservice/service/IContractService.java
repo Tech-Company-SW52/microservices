@@ -22,7 +22,9 @@ public interface IContractService {
 
     Contract changeVisibility(Long id);
 
-    Contract createContract(Long carrierId, Long ClientId, Contract contract);
+    Contract createContract(
+            Long carrierId, Long clientId, String districtFromId,
+            String districtToId, Contract contract);
 
     Contract getById(Long id);
 

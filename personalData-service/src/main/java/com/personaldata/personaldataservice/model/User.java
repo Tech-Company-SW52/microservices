@@ -19,6 +19,7 @@ public class User {
     private String photoUrl;
     private String phone;
     private Type type;
+    private District district;
     private String street;
     private int stars;
 }

@@ -57,7 +57,9 @@ public class CarrierRest {
 
     @GetMapping(value = "/searchEmailAndPassword/{email}/{password}")
     public ResponseEntity<User> getCarrierByEmailAndPassword(
-            @PathVariable("email") String email, @PathVariable("password") String password) {
+            @PathVariable("email") String email,
+            @PathVariable("password") String password) {
+
         log.info("Fetching Carrier with email {} and password {}", email, password);
         User carrier = carrierService.findByEmailAndPassword(email, password);
         if (carrier == null) {

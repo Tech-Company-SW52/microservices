@@ -5,6 +5,7 @@ import com.hiring.hiringservice.client.ClientClient;
 import com.hiring.hiringservice.entity.Contract;
 import com.hiring.hiringservice.entity.User;
 import com.hiring.hiringservice.repository.IContractRepository;
+import com.hiring.hiringservice.repository.IDistrictRepository;
 import com.hiring.hiringservice.repository.INotificationRepository;
 import com.hiring.hiringservice.repository.IStatusContractRepository;
 import com.hiring.hiringservice.service.IContractService;
@@ -19,6 +20,8 @@ public class ContractServiceImpl implements IContractService {
 
     @Autowired
     IContractRepository contractRepository;
+    @Autowired
+    IDistrictRepository districtRepository;
     @Autowired
     IStatusContractRepository statusContractRepository;
     @Autowired
@@ -129,7 +132,8 @@ public class ContractServiceImpl implements IContractService {
     }
 
     @Override
-    public Contract createContract(Long carrierId, Long clientId, Contract contract) {
+    public Contract createContract(Long carrierId, Long clientId,
+            String districtFromId, String districtToId, Contract contract) {
         User carrierDB = carrierClient.getCarrier(carrierId).getBody();
         if (carrierDB == null)
             return null;
@@ -139,6 +143,8 @@ public class ContractServiceImpl implements IContractService {
         contract.setCarrier(carrierDB);
         contract.setClient(clientDB);
         contract.setVisible(true);
+        contract.setDistrictFrom(districtRepository.findById(districtFromId).orElse(null));
+        contract.setDistrictTo(districtRepository.findById(districtToId).orElse(null));
         contract.setStatus(statusContractRepository.findByStatus("OFFER"));
         contract.setNotification(notificationRepository.findByReadStatus(false));
         return contractRepository.save(contract);

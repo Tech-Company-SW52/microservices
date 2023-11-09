@@ -1,12 +1,12 @@
-package com.personaldata.personaldataservice.model;
+package com.fastporte.search_service.model;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class District {
+public class Province {
     private String id;
     private String name;
-    private Province province;
+    private Department department;
 }

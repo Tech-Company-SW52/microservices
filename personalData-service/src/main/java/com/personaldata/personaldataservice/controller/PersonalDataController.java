@@ -13,7 +13,7 @@ public class PersonalDataController {
     @Autowired
     IPersonalDataService personalDataService;
 
-    @PutMapping(value = "/client/{id}/districtId/{districtId}")
+    @PutMapping(value = "/client/{id}/district/{districtId}")
     public ResponseEntity<User> updateClient(
             @PathVariable("id") long id,
             @PathVariable("districtId") String districtId,
@@ -26,7 +26,7 @@ public class PersonalDataController {
         return ResponseEntity.ok(clientUpdated);
     }
 
-    @PutMapping(value = "/carrier/{id}/districtId/{districtId}")
+    @PutMapping(value = "/carrier/{id}/district/{districtId}")
     public ResponseEntity<User> updateCarrier(
             @PathVariable("id") long id,
             @PathVariable("districtId") String districtId,

@@ -15,7 +15,7 @@ public interface CarrierClient {
     @GetMapping(value = "/carrier/{id}")
     ResponseEntity<User> getCarrier(@PathVariable("id") long id);
 
-    @PutMapping(value = "/carrier/{id}/districtId/{districtId}")
+    @PutMapping(value = "/carrier/{id}/district/{districtId}")
     ResponseEntity<User> updateCarrier(
             @PathVariable("id") long id,
             @PathVariable("districtId") String districtId,
