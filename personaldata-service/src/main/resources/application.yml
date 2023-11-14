@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: personaldata-service
+  cloud:
+    config:
+      uri: http://localhost:8801
+      username: root
+      password: s3cr3t
+  boot:
+    admin:
+      client:
+        url: http://localhost:8086
+  config:
+    import: optional:configserver:http://localhost:8081
