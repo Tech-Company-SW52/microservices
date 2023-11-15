@@ -9,5 +9,5 @@ public interface IDistrictService {
 
     public List<District> findDistrictAll();
 
-    public District finDistrictByName(String name);
+    public List<District> finDistrictByName(String name);
 }

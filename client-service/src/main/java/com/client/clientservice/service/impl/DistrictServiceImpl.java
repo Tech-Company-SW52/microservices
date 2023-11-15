@@ -25,7 +25,7 @@ public class DistrictServiceImpl implements IDistrictService {
     }
 
     @Override
-    public District finDistrictByName(String name) {
+    public List<District> finDistrictByName(String name) {
         return districtRepository.findByName(name);
     }
 

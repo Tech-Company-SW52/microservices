@@ -42,13 +42,13 @@ public class DistrictRest {
     }
 
     @GetMapping(value = "/name/{name}")
-    public ResponseEntity<District> getDistrictByName(@PathVariable("name") String name) {
+    public ResponseEntity<List<District>> getDistrictByName(@PathVariable("name") String name) {
         log.info("Fetching District with name {}", name);
-        District district = districtService.finDistrictByName(name);
-        if (district == null) {
-            log.error("District with name {} not found.", name);
+        List<District> districts = districtService.finDistrictByName(name);
+        if (districts.isEmpty()) {
+            log.error("District or Districts with name {} not found.", name);
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(district);
+        return ResponseEntity.ok(districts);
     }
 }
