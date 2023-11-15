@@ -16,7 +16,7 @@ spring:
         - id: client-service
           uri: lb://client-service
           predicates:
-            - Path=/client/**
+            - Path=/client/** , /district/**
         - id: carrier-service
           uri: lb://carrier-service
           predicates:
