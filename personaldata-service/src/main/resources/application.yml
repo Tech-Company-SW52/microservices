@@ -11,4 +11,4 @@ spring:
       client:
         url: http://admin-service:8086
   config:
-    import: optional:configserver:http://config-service:8081
+    import: configserver:http://config-service:8081
