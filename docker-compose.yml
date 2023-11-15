@@ -1,0 +1,74 @@
+version: '3'
+services:
+  config-service:
+    image: config-service:latest
+    ports:
+      - 8081:8081
+
+  registry-service:
+    image: registry-service:latest
+    ports:
+      - 8099:8099
+    depends_on:
+      - config-service
+    restart: on-failure
+
+  admin-service:
+    image: admin-service:latest
+    ports:
+      - 8086:8086
+    restart: on-failure
+
+  gateway-service:
+    image: gateway-service:latest
+    ports:
+      - 8080:8080
+    depends_on:
+      - config-service
+      - registry-service
+      - admin-service
+    restart: on-failure
+  
+  client-service:
+    image: client-service:latest
+    ports:
+      - 8091:8091
+    depends_on:
+      - config-service
+      - registry-service
+      - admin-service
+    restart: on-failure
+
+  carrier-service:
+    image: carrier-service:latest
+    ports:
+      - 8092:8092
+    depends_on:
+      - config-service
+      - registry-service
+      - admin-service
+    restart: on-failure
+
+  personaldata-service:
+    image: personaldata-service:latest
+    ports:
+      - 8093:8093
+    depends_on:
+      - client-service
+    restart: on-failure
+
+  hiring-service:
+    image: hiring-service:latest
+    ports:
+      - 8094:8094
+    depends_on:
+      - client-service
+    restart: on-failure
+
+  search-service:
+    image: search-service:latest
+    ports:
+      - 8098:8098
+    depends_on:
+      - client-service
+    restart: on-failure

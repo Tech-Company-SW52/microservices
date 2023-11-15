@@ -3,12 +3,12 @@ spring:
     name: client-service
   cloud:
     config:
-      uri: http://localhost:8081
+      uri: http://config-service:8081
       username: root
       password: s3cr3t
   boot:
     admin:
       client:
-        url: http://localhost:8086
+        url: http://admin-service:8086
   config:
-    import: configserver:http://localhost:8081
+    import: configserver:http://config-service:8081

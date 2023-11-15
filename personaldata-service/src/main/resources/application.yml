@@ -3,12 +3,12 @@ spring:
     name: personaldata-service
   cloud:
     config:
-      uri: http://localhost:8801
+      uri: http://config-service:8081
       username: root
       password: s3cr3t
   boot:
     admin:
       client:
-        url: http://localhost:8086
+        url: http://admin-service:8086
   config:
-    import: optional:configserver:http://localhost:8081
+    import: optional:configserver:http://config-service:8081
